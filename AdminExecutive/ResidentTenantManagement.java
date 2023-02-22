@@ -1,9 +1,13 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package AdminExecutive;
+
+/**
+ *
+ * @author Hong Shen
+ */
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,8 +32,8 @@ public class ResidentTenantManagement {
     private int unit;
     private String username;
     private String password;
-    public static final String FILE_NAME = "C:\\Users\\60192\\Documents\\NetBeansProjects\\PropertyManagementSystem\\src\\AdminExecutive\\residentfile.txt";
-    ArrayList<ResidentTenantManagement> resident_tenant = new ArrayList<>(10);
+    public static final String FILE_NAME = "residentfile.txt";
+    ArrayList<ResidentTenantManagement> resident_tenant = new ArrayList<>(20);
 
     Scanner input = new Scanner(System.in);
     Scanner search = new Scanner(System.in);
@@ -41,12 +45,13 @@ public class ResidentTenantManagement {
     }
 
     //constructor with arguments
-    ResidentTenantManagement(String id, String name, int age, int floor, int unit) {
+    ResidentTenantManagement(String id, String name, int age, int floor, int unit,String password) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.floor = floor;
         this.unit = unit;
+        this.password=password;
 
     }
 
@@ -155,6 +160,8 @@ public class ResidentTenantManagement {
         id = input.nextLine();
         System.out.println("Enter Resident/Tenant name: ");
         name = input.nextLine();
+        System.out.println("Enter Resident/Tenant password: ");
+        password = input.nextLine();
         System.out.println("Enter Resident/Tenant age: ");
         age = input.nextInt();
         input.nextLine();
@@ -163,6 +170,7 @@ public class ResidentTenantManagement {
         input.nextLine();
         System.out.println("Enter Resident/Tenant unit: ");
         unit = input.nextInt();
+        
 
     }
 
@@ -184,9 +192,11 @@ public class ResidentTenantManagement {
                     ResidentTenantManagement newRT = new ResidentTenantManagement();
                     newRT.setId(parts[0]);
                     newRT.setName(parts[1]);
-                    newRT.setAge(Integer.parseInt(parts[2]));
-                    newRT.setFloor(Integer.parseInt(parts[3]));
-                    newRT.setUnit(Integer.parseInt(parts[4]));
+                    newRT.setPassword(parts[2]);
+                    newRT.setAge(Integer.parseInt(parts[3]));
+                    newRT.setFloor(Integer.parseInt(parts[4]));
+                    newRT.setUnit(Integer.parseInt(parts[5]));
+                    //newRT.setPassword(parts[5]);
                     resident_tenant.add(newRT);
                 }
             }
@@ -204,6 +214,7 @@ public class ResidentTenantManagement {
                 for (int i = 0; i < resident_tenant.size(); i++) {
                     infile.append(resident_tenant.get(i).getId() + " "
                             + resident_tenant.get(i).getName() + " "
+                            + resident_tenant.get(i).getPassword() + " "
                             + resident_tenant.get(i).getAge() + " "
                             + resident_tenant.get(i).getFloor() + " "
                             + resident_tenant.get(i).getUnit() + "\n");
@@ -223,9 +234,10 @@ public class ResidentTenantManagement {
                     ResidentTenantManagement newRT = new ResidentTenantManagement();
                     newRT.setId(parts[0]);
                     newRT.setName(parts[1]);
-                    newRT.setAge(Integer.parseInt(parts[2]));
-                    newRT.setFloor(Integer.parseInt(parts[3]));
-                    newRT.setUnit(Integer.parseInt(parts[4]));
+                    newRT.setPassword(parts[2]);
+                    newRT.setAge(Integer.parseInt(parts[3]));
+                    newRT.setFloor(Integer.parseInt(parts[4]));
+                    newRT.setUnit(Integer.parseInt(parts[5]));
                     resident_tenant.add(newRT);
                 }
             }
@@ -241,10 +253,11 @@ public class ResidentTenantManagement {
                 found = true;
                 System.out.println("Select the field you want to modify");
                 System.out.println("1. Name");
-                System.out.println("2. Age");
-                System.out.println("3. Floor");
-                System.out.println("4. Unit");
-                System.out.println("5. Cancel");
+                System.out.println("2. Password");
+                System.out.println("3. Age");
+                System.out.println("4. Floor");
+                System.out.println("5. Unit");
+                System.out.println("6. Cancel");
                 System.out.print("Enter choice: ");
                 int choice = input.nextInt();
                 input.nextLine();
@@ -252,28 +265,33 @@ public class ResidentTenantManagement {
                 switch (choice) {
                     case 1 -> {
                         System.out.print("Enter new name: ");
-                        String name = input.nextLine();
-                        resident.setName(name);
+                        String new_name = input.nextLine();
+                        resident.setName(new_name);
                     }
-                    case 2 -> {
-                        System.out.print("Enter new age: ");
-                        int age = input.nextInt();
-                        input.nextLine();
-                        resident.setAge(age);
+                    case 2->{
+                        System.out.println("Enter new password: ");
+                        String new_password=input.nextLine();
+                        resident.setPassword(new_password);
                     }
                     case 3 -> {
-                        System.out.print("Enter new floor: ");
-                        int floor = input.nextInt();
+                        System.out.print("Enter new age: ");
+                        int new_age = input.nextInt();
                         input.nextLine();
-                        resident.setFloor(floor);
+                        resident.setAge(new_age);
                     }
                     case 4 -> {
-                        System.out.print("Enter new unit: ");
-                        int unit = input.nextInt();
+                        System.out.print("Enter new floor: ");
+                        int new_floor = input.nextInt();
                         input.nextLine();
-                        resident.setUnit(unit);
+                        resident.setFloor(new_floor);
                     }
                     case 5 -> {
+                        System.out.print("Enter new unit: ");
+                        int new_unit = input.nextInt();
+                        input.nextLine();
+                        resident.setUnit(new_unit);
+                    } 
+                    case 6 -> {
                         System.out.println("Modification canceled.");
                         return;
                     }
@@ -294,9 +312,10 @@ public class ResidentTenantManagement {
                     for (int i = 0; i < resident_tenant.size(); i++) {
                         infile.append(resident_tenant.get(i).getId() + " "
                                 + resident_tenant.get(i).getName() + " "
-                                + resident_tenant.get(i).getAge() + " "
-                                + resident_tenant.get(i).getFloor() + " "
-                                + resident_tenant.get(i).getUnit() + "\n");
+                            + resident_tenant.get(i).getPassword() + " "
+                            + resident_tenant.get(i).getAge() + " "
+                            + resident_tenant.get(i).getFloor() + " "
+                            + resident_tenant.get(i).getUnit() + "\n");
                     }
                 }
             } catch (IOException ev) {
@@ -314,9 +333,10 @@ public class ResidentTenantManagement {
                     ResidentTenantManagement newRT = new ResidentTenantManagement();
                     newRT.setId(parts[0]);
                     newRT.setName(parts[1]);
-                    newRT.setAge(Integer.parseInt(parts[2]));
-                    newRT.setFloor(Integer.parseInt(parts[3]));
-                    newRT.setUnit(Integer.parseInt(parts[4]));
+                    newRT.setPassword(parts[2]);
+                    newRT.setAge(Integer.parseInt(parts[3]));
+                    newRT.setFloor(Integer.parseInt(parts[4]));
+                    newRT.setUnit(Integer.parseInt(parts[5]));
                     resident_tenant.add(newRT);
                 }
             }
@@ -351,9 +371,10 @@ public class ResidentTenantManagement {
                     ResidentTenantManagement newRT = new ResidentTenantManagement();
                     newRT.setId(parts[0]);
                     newRT.setName(parts[1]);
-                    newRT.setAge(Integer.parseInt(parts[2]));
-                    newRT.setFloor(Integer.parseInt(parts[3]));
-                    newRT.setUnit(Integer.parseInt(parts[4]));
+                    newRT.setPassword(parts[2]);
+                    newRT.setAge(Integer.parseInt(parts[3]));
+                    newRT.setFloor(Integer.parseInt(parts[4]));
+                    newRT.setUnit(Integer.parseInt(parts[5]));
                     resident_tenant.add(newRT);
                 }
             }
@@ -402,4 +423,3 @@ public class ResidentTenantManagement {
         System.out.println("Deleted the resident with the ID: " + residentUnitToDelete);
     }
 }
-
