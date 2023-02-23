@@ -23,14 +23,14 @@ import java.util.ArrayList;
  *
  * @author 60192
  */
+
 public class ResidentTenantManagement {
 
-    String id;
+    private String id;
     private String name;
     private int age;
     private int floor;
     private int unit;
-    private String username;
     private String password;
     public static final String FILE_NAME = "residentfile.txt";
     ArrayList<ResidentTenantManagement> resident_tenant = new ArrayList<>(20);
@@ -41,18 +41,16 @@ public class ResidentTenantManagement {
 
     //default constructor
     ResidentTenantManagement() {
-
     }
 
     //constructor with arguments
-    ResidentTenantManagement(String id, String name, int age, int floor, int unit,String password) {
+    ResidentTenantManagement(String id, String name, int age, String password,int floor, int unit) {
         this.id = id;
         this.name = name;
         this.age = age;
-        this.floor = floor;
-        this.unit = unit;
         this.password=password;
-
+        this.floor = floor;
+        this.unit = unit;       
     }
 
     public String getId() {
@@ -75,9 +73,6 @@ public class ResidentTenantManagement {
         return unit;
     }
 
-    public String getUsername() {
-        return username;
-    }
 
     public String getPassword() {
         return password;
@@ -103,9 +98,6 @@ public class ResidentTenantManagement {
         this.unit = unit;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public void setPassword(String password) {
         this.password = password;
