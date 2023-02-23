@@ -24,7 +24,7 @@ public class FacilityBooking extends FacilityManagement {
     private int startTime;
     private int endTime;
     private String bookedBy;
-    public static final String FILE_NAME3 = "C:\\Users\\60192\\Documents\\NetBeansProjects\\PropertyManagementSystem\\src\\AdminExecutive\\facilitybooking.txt";
+    public static final String FILE_NAME3 = "facilitybooking.txt";
     ArrayList<FacilityBooking> facilityB = new ArrayList<>(10);
 
     public FacilityBooking() {
