@@ -19,8 +19,8 @@ public class UnitManagement extends ResidentTenantManagement {
         super();
     }
 
-    public UnitManagement(String id, String name, int age, int floor, int unit) {
-        super(id, name, age, floor, unit);
+    public UnitManagement(String id, String name, int age, String password, int floor, int unit) {
+        super(id, name, age, password, floor, unit);
 
     }
 
