@@ -22,7 +22,7 @@ public class EmployeeManagement {
     Scanner input = new Scanner(System.in);
     Scanner search3 = new Scanner(System.in);
     int choice, cont;
-    public static final String FILE_NAME4 = "C:\\Users\\60192\\Documents\\NetBeansProjects\\PropertyManagementSystem\\src\\AdminExecutive\\employee.txt";
+    public static final String FILE_NAME4 = "employee.txt";
     ArrayList<EmployeeManagement> employee = new ArrayList<>(10);
 
     public EmployeeManagement() {
