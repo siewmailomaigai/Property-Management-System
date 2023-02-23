@@ -4,6 +4,10 @@
  */
 package AdminExecutive;
 
+/**
+ *
+ * @author Hong Shen
+ */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,7 +27,7 @@ public class FacilityBooking extends FacilityManagement {
     private String bookingDate;
     private int startTime;
     private int endTime;
-    private String bookedBy;
+    private String id;
     public static final String FILE_NAME3 = "facilitybooking.txt";
     ArrayList<FacilityBooking> facilityB = new ArrayList<>(10);
 
@@ -31,14 +35,14 @@ public class FacilityBooking extends FacilityManagement {
         super();
     }
 
-    public FacilityBooking(String facilityName, int capacity, String bookingDate, int startTime, int endTime, String bookedBy) {
+    public FacilityBooking(String facilityName, int capacity, String bookingDate, int startTime, int endTime, String id) {
         super();
         this.facilityName = facilityName;
         this.capacity = capacity;
         this.bookingDate = bookingDate;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.bookedBy = bookedBy;
+        this.id = id;
     }
 
     public String getBookingDate() {
@@ -65,15 +69,17 @@ public class FacilityBooking extends FacilityManagement {
         this.endTime = endTime;
     }
 
-    public String getBookedBy() {
-        return bookedBy;
+    public String getId() {
+        return id;
     }
 
-    public void setBookedBy(String bookedBy) {
-        this.bookedBy = bookedBy;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void newFacilityB() {
+        System.out.println("ID : ");
+        id = input.nextLine();
         System.out.println("Enter facility name(gym, basketball court, pool, snooker): ");
         facilityName = input.nextLine();
         System.out.println("Enter booking date: ");
@@ -83,17 +89,16 @@ public class FacilityBooking extends FacilityManagement {
         System.out.println("Enter end time: ");
         endTime = input.nextInt();
         input.nextLine();
-        System.out.println("Booked by? : ");
-        bookedBy = input.nextLine();
+        
     }
 
     public void showBookingInfo() {
         System.out.println("Booking Information:");
+        System.out.println("Booked By: " + getId());
         System.out.println("Facility Name: " + getFacilityName());
         System.out.println("Date: " + getBookingDate());
         System.out.println("Start Time: " + getStartTime());
-        System.out.println("End Time: " + getEndTime());
-        System.out.println("Booked By: " + getBookedBy());
+        System.out.println("End Time: " + getEndTime());        
         System.out.println("\n");
 
     }
@@ -145,11 +150,12 @@ public class FacilityBooking extends FacilityManagement {
                 String[] parts = line.split(" ");
                 FacilityBooking newFacb = new FacilityBooking();
                 if (parts.length >= 5) {
-                    newFacb.setFacilityName(parts[0]);
-                    newFacb.setBookingDate(parts[1]);
-                    newFacb.setStartTime(Integer.parseInt(parts[2]));
-                    newFacb.setEndTime(Integer.parseInt(parts[3]));
-                    newFacb.setBookedBy(parts[4]);
+                    newFacb.setId(parts[0]);
+                    newFacb.setFacilityName(parts[1]);
+                    newFacb.setBookingDate(parts[2]);
+                    newFacb.setStartTime(Integer.parseInt(parts[3]));
+                    newFacb.setEndTime(Integer.parseInt(parts[4]));
+                    
                 }
                 facilityB.add(newFacb);
             }
@@ -177,11 +183,12 @@ public class FacilityBooking extends FacilityManagement {
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME3, true));
-            writer.write(newFacb2.getFacilityName() + " "
+            writer.write(
+                    newFacb2.getId() +" "
+                    + newFacb2.getFacilityName() + " "
                     + newFacb2.getBookingDate() + " "
                     + newFacb2.getStartTime() + " "
-                    + newFacb2.getEndTime() + " "
-                    + newFacb2.getBookedBy() + "\n");
+                    + newFacb2.getEndTime() + "\n");
             writer.close();
         } catch (IOException e) {
             System.out.println("An error occurred while updating the file.");
@@ -196,11 +203,11 @@ public class FacilityBooking extends FacilityManagement {
                     String[] parts = line.split(" ");
                     FacilityBooking newFacb = new FacilityBooking();
                     if (parts.length >= 5) {
-                        newFacb.setFacilityName(parts[0]);
-                        newFacb.setBookingDate(parts[1]);
-                        newFacb.setStartTime(Integer.parseInt(parts[2]));
-                        newFacb.setEndTime(Integer.parseInt(parts[3]));
-                        newFacb.setBookedBy(parts[4]);
+                        newFacb.setId(parts[0]);
+                        newFacb.setFacilityName(parts[1]);
+                        newFacb.setBookingDate(parts[2]);
+                        newFacb.setStartTime(Integer.parseInt(parts[3]));
+                        newFacb.setEndTime(Integer.parseInt(parts[4]));
                     }
                     facilityB.add(newFacb);
                 }
@@ -222,11 +229,11 @@ public class FacilityBooking extends FacilityManagement {
                     String[] parts = line.split(" ");
                     FacilityBooking newFacb = new FacilityBooking();
                     if (parts.length >= 5) {
-                        newFacb.setFacilityName(parts[0]);
-                        newFacb.setBookingDate(parts[1]);
-                        newFacb.setStartTime(Integer.parseInt(parts[2]));
-                        newFacb.setEndTime(Integer.parseInt(parts[3]));
-                        newFacb.setBookedBy(parts[4]);
+                        newFacb.setId(parts[0]);
+                        newFacb.setFacilityName(parts[1]);
+                        newFacb.setBookingDate(parts[2]);
+                        newFacb.setStartTime(Integer.parseInt(parts[3]));
+                        newFacb.setEndTime(Integer.parseInt(parts[4]));
                     }
 
                     facilityB.add(newFacb);
@@ -236,11 +243,11 @@ public class FacilityBooking extends FacilityManagement {
             System.out.println("The file 'facilitybooking.txt' was not found.");
         }
 
-        System.out.print("Booked by? : ");
-        String checkName = search2.nextLine();
+        System.out.print("ID? : ");
+        String checkId = search2.nextLine();
         boolean found = false;
         for (int a = 0; a < facilityB.size(); a++) {
-            if (facilityB.get(a).getBookedBy().equalsIgnoreCase(checkName)) {
+            if (facilityB.get(a).getId().equalsIgnoreCase(checkId)) {
                 found = true;
                 System.out.println("Select the field you want to modify");
                 System.out.println("1. Facility Name");
@@ -286,16 +293,17 @@ public class FacilityBooking extends FacilityManagement {
             }
         }
         if (!found) {
-            System.out.println("Person not found.");
+            System.out.println("ID not found.");
         } else {
             try {
                 try (FileWriter infile = new FileWriter(FILE_NAME3)) {
                     for (int i = 0; i < facilityB.size(); i++) {
-                        infile.append(facilityB.get(i).getFacilityName() + " "
+                        infile.append(
+                                facilityB.get(i).getId() + " "
+                                + facilityB.get(i).getFacilityName() + " "
                                 + facilityB.get(i).getBookingDate() + " "
                                 + facilityB.get(i).getStartTime() + " "
-                                + facilityB.get(i).getEndTime() + " "
-                                + facilityB.get(i).getBookedBy() + "\n");
+                                + facilityB.get(i).getEndTime() + "\n");
                     }
                 }
             } catch (IOException ev) {
@@ -305,9 +313,9 @@ public class FacilityBooking extends FacilityManagement {
     }
 
     public void deleteFacilityB() {
-        System.out.print("Enter person's name to be deleted: ");
+        System.out.print("Enter ID to be deleted: ");
         Scanner scan = new Scanner(System.in);
-        String personNameToDelete = scan.nextLine();
+        String IdToDelete = scan.nextLine();
 
         StringBuilder contentBuilder = new StringBuilder();
         boolean residentFound = false;
@@ -315,8 +323,8 @@ public class FacilityBooking extends FacilityManagement {
             String currentLine;
             while ((currentLine = br.readLine()) != null) {
                 String[] parts = currentLine.split(" ");
-                String name = (parts[4]);
-                if (name.equals(personNameToDelete)) {
+                String savedId = (parts[0]);
+                if (savedId.equals(IdToDelete)) {
                     residentFound = true;
                 } else {
                     contentBuilder.append(currentLine).append("\n");
@@ -327,7 +335,7 @@ public class FacilityBooking extends FacilityManagement {
         }
 
         if (!residentFound) {
-            System.out.println("Person with name " + personNameToDelete + " was not found.");
+            System.out.println("Person with name " + IdToDelete + " was not found.");
             return;
         }
 
@@ -337,8 +345,7 @@ public class FacilityBooking extends FacilityManagement {
             e.printStackTrace();
         }
 
-        System.out.println("Deleted the person with name: " + personNameToDelete);
+        System.out.println("Deleted the person with ID: " + IdToDelete);
     }
 
 }
-
