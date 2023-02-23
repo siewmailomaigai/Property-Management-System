@@ -22,7 +22,7 @@ public class ComplaintManagement {
     Scanner input = new Scanner(System.in);
     Scanner search4 = new Scanner(System.in);
     int choice, cont;
-    public static final String FILE_NAME5 = "C:\\Users\\60192\\Documents\\NetBeansProjects\\PropertyManagementSystem\\src\\AdminExecutive\\complaints.txt";
+    public static final String FILE_NAME5 = "complaints.txt";
     ArrayList<ComplaintManagement> complaint = new ArrayList<>(10);
 
     public ComplaintManagement() {
