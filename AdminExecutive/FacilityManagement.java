@@ -28,7 +28,7 @@ public class FacilityManagement {
     private double hourlyRate;
     Scanner input = new Scanner(System.in);
     Scanner search2 = new Scanner(System.in);
-    public static final String FILE_NAME2 = "C:\\Users\\60192\\Documents\\NetBeansProjects\\PropertyManagementSystem\\src\\AdminExecutive\\facilitymanagement.txt";
+    public static final String FILE_NAME2 = "facilitymanagement.txt";
     ArrayList<FacilityManagement> facility = new ArrayList<>(10);
     final static int MAX_CAPACITY = 2;
     int choice, cont;
