@@ -1,1 +1,88 @@
+package com.mycompany.assignmentoodj;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class GUI extends JFrame implements ActionListener {   
+    // Login panel
+    JPanel loginPanel = new JPanel();
+    JLabel loginLabel = new JLabel("Login");
+    JLabel loginUsernameLabel = new JLabel("Username:");
+    JLabel loginPasswordLabel = new JLabel("Password:");
+    JTextField loginUsernameField = new JTextField();
+    JPasswordField loginPasswordField = new JPasswordField();
+    JButton loginButton = new JButton("Login");
+
+    // Sign in panel
+    JPanel signInPanel = new JPanel();
+    JLabel signInLabel = new JLabel("Sign in");
+    JLabel signInUsernameLabel = new JLabel("Username:");
+    JLabel signInPasswordLabel = new JLabel("Password:");
+    JTextField signInUsernameField = new JTextField();
+    JPasswordField signInPasswordField = new JPasswordField();
+    JButton signInButton = new JButton("Sign in");
+
+    public GUI() {                 
+        // Login panel components
+        loginPanel.setLayout(new GridLayout(3, 2));
+        loginPanel.add(loginUsernameLabel);
+        loginPanel.add(loginUsernameField);
+        loginPanel.add(loginPasswordLabel);
+        loginPanel.add(loginPasswordField);
+        loginPanel.add(new JLabel());
+        loginPanel.add(loginButton);
+
+        // Sign in panel components
+        signInPanel.setLayout(new GridLayout(3, 2));
+        signInPanel.add(signInUsernameLabel);
+        signInPanel.add(signInUsernameField);
+        signInPanel.add(signInPasswordLabel);
+        signInPanel.add(signInPasswordField);
+        signInPanel.add(new JLabel());
+        signInPanel.add(signInButton);
+
+        // Add components to frame
+        add(loginLabel);
+        add(loginPanel);
+        add(signInLabel);
+        add(signInPanel);
+
+        // Add action listeners to buttons
+        loginButton.addActionListener(this);
+        signInButton.addActionListener(this);
+
+        pack();
+        setLayout(new GridLayout(2, 1));
+        setTitle("Login and Sign in page");
+        setSize(600, 400);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == loginButton) {
+            // Handle login button click
+            String username = loginUsernameField.getText();
+            String password = new String(loginPasswordField.getPassword());
+            // Authenticate user with username and password
+            // ...
+            // If authentication successful, do something
+            // ...
+        } else if (e.getSource() == signInButton) {
+            // Handle sign in button click
+            String username = signInUsernameField.getText();
+            String password = new String(signInPasswordField.getPassword());
+            // Create new user with username and password
+            // ...
+            // If user creation successful, do something
+            // ...
+        }
+    }
+
+    public static void main(String[] args) {
+        GUI loginAndSignIn = new GUI();
+    }
+}
 
