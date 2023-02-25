@@ -14,6 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -21,7 +23,7 @@ public class ComplaintManagement {
 
     private String complaintID;
     private String id; 
-    private String date; 
+    private LocalDate date; 
     private String complaintType;
     private String complaintDetail;
     private String complaintStatus;
@@ -30,12 +32,13 @@ public class ComplaintManagement {
     int choice, cont;
     public static final String FILE_NAME5 = "complaints.txt";
     public static final String DEFAULT_COMPLAINT_ID = "C00";
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Format for date input
     ArrayList<ComplaintManagement> complaint = new ArrayList<>();
 
     public ComplaintManagement() {
     }
 
-    public ComplaintManagement(String complaintID, String id, String date, String complaintType, String complaintDetail, String complaintStatus) {
+    public ComplaintManagement(String complaintID, String id, LocalDate date, String complaintType, String complaintDetail, String complaintStatus) {
         this.complaintID = complaintID;
         this.id = id;
         this.date = date;
@@ -60,11 +63,11 @@ public class ComplaintManagement {
         this.id = id;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -157,7 +160,7 @@ public class ComplaintManagement {
         System.out.println("Enter User ID: ");
         id = input.nextLine();
         System.out.println("Enter date of complaint: ");
-        date = input.nextLine();
+        date = LocalDate.parse(input.nextLine(),DATE_FORMATTER);
         System.out.println("Enter complaint type: ");
         complaintType = input.nextLine();
         System.out.println("Enter complaint's details: ");
@@ -170,7 +173,7 @@ public class ComplaintManagement {
         System.out.println("\nComplaints: ");
         System.out.println("Complaint ID: " + getComplaintID());
         System.out.println("User ID: " + getId());
-        System.out.println("Date of complaint: " + getDate());
+        System.out.println("Date of complaint (yyyy-MM-dd): " + getDate());
         System.out.println("Type of complaint: " + getComplaintType());
         System.out.println("Details of complaint: " + getComplaintDetail());
         System.out.println("Complaint Status: " + getComplaintStatus());
@@ -189,7 +192,7 @@ public class ComplaintManagement {
                     if (parts.length >= 6) {
                         newC.setComplaintID(parts[0]);
                         newC.setId(parts[1]);
-                        newC.setDate(parts[2]);
+                        newC.setDate(LocalDate.parse(parts[2],DATE_FORMATTER));
                         newC.setComplaintType(parts[3]);
                         newC.setComplaintDetail(parts[4]);
                         newC.setComplaintStatus(parts[5]);
@@ -232,7 +235,7 @@ public class ComplaintManagement {
                     ComplaintManagement newC = new ComplaintManagement();
                     newC.setComplaintID(parts[0]);
                     newC.setId(parts[1]);
-                    newC.setDate(parts[2]);
+                    newC.setDate(LocalDate.parse(parts[2],DATE_FORMATTER));
                     newC.setComplaintType(parts[3]);
                     newC.setComplaintDetail(parts[4]);
                     newC.setComplaintStatus(parts[5]);
@@ -258,7 +261,7 @@ public class ComplaintManagement {
                     if (parts.length >= 6) {
                         newC.setComplaintID(parts[0]);
                         newC.setId(parts[1]);
-                        newC.setDate(parts[2]);
+                        newC.setDate(LocalDate.parse(parts[2],DATE_FORMATTER));
                         newC.setComplaintType(parts[3]);
                         newC.setComplaintDetail(parts[4]);
                         newC.setComplaintStatus(parts[5]);
@@ -296,7 +299,7 @@ public class ComplaintManagement {
                     }
                     case 2 -> {
                         System.out.print("Enter new date: ");
-                        String newDate = input.nextLine();
+                        LocalDate newDate = LocalDate.parse(input.nextLine(),DATE_FORMATTER);
                         c.setDate(newDate);
                     }
                     case 3 -> {
