@@ -1,9 +1,0 @@
-R01 jared 1 2 3
-R02 bob 1 3 6
-R03 jiajun 1 3 6
-R04 wx 0 2 6
-R00 john 24 8 9
-R06 ky 6 2 4
-R017 edelynn 9 9 9
-R11 ali 55 6 1
-R97 mary 22 2 2
