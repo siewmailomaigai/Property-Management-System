@@ -16,7 +16,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -326,7 +325,10 @@ public class FacilityBooking extends FacilityManagement {
                         LocalTime newEndTime = LocalTime.parse(input.nextLine(), TIME_FORMATTER);
                         facb.setEndTime(newEndTime);
                     }
-
+                    case 6 -> {
+                        System.out.println("Modification canceled.");
+                        return;
+                    }
                     default ->
                         System.out.println("Invalid input.");
                 }
@@ -370,7 +372,7 @@ public class FacilityBooking extends FacilityManagement {
             while ((currentLine = br.readLine()) != null) {
                 String[] parts = currentLine.split("\\|");
                 String savedId = (parts[0]);
-                if (savedId.equals(bookIdDelete)) {
+                if (savedId.equalsIgnoreCase(bookIdDelete)) {
                     bookIdFound = true;
                 } else {
                     contentBuilder.append(currentLine).append("\n");
@@ -381,7 +383,7 @@ public class FacilityBooking extends FacilityManagement {
         }
 
         if (!bookIdFound) {
-            System.out.println("Person with name " + bookIdDelete + " was not found.");
+            System.out.println("Booking ID " + bookIdDelete + " was not found.");
             return;
         }
 
@@ -391,7 +393,7 @@ public class FacilityBooking extends FacilityManagement {
             e.printStackTrace();
         }
 
-        System.out.println("Deleted the person with ID: " + bookIdDelete);
+        System.out.println("Deleted the booking ID: " + bookIdDelete);
     }
 
 }
