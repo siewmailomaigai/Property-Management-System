@@ -39,11 +39,11 @@ public class ResidentTenantManagement {
     int choice, cont;
 
     //default constructor
-    ResidentTenantManagement() {
+    public ResidentTenantManagement() {
     }
 
     //constructor with arguments
-    ResidentTenantManagement(String id, String name, int age, String password, String unit) {
+    public ResidentTenantManagement(String id, String name, int age, String password, String unit) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -101,10 +101,9 @@ public class ResidentTenantManagement {
     public void runResident() {
 
         do {
-            System.out.println("1.Add New Resident/Tenant\n2.Modify Resident/Tenant\n3.Search\n4.View");
+            System.out.println("1.Add New Resident/Tenant\n2.Modify Resident/Tenant\n3.Search\n4.View\n5.Delete");
             choice = input.nextInt();
 
-            //add or new resident/tenant details
             switch (choice) {
                 case 1 -> {
                     ResidentTenantManagement add = new ResidentTenantManagement();
@@ -180,7 +179,7 @@ public class ResidentTenantManagement {
     }
 
     public void showResidentInfo() {
-        System.out.println("Resident Information:");
+        System.out.println("\nResident Information:");
         System.out.println("ID: " + getId());
         System.out.println("Name: " + getName());
         System.out.println("Age: " + getAge());
@@ -210,7 +209,6 @@ public class ResidentTenantManagement {
         newRT2.newResident_Tenant();
         resident_tenant.add(newRT2);
 
-        //newRT.addToFile();
         try {
             try (FileWriter infile = new FileWriter(FILE_NAME)) {
                 for (int i = 0; i < resident_tenant.size(); i++) {
@@ -388,7 +386,7 @@ public class ResidentTenantManagement {
             String currentLine;
             while ((currentLine = br.readLine()) != null) {
                 String[] parts = currentLine.split("\\|");
-                String savedID = parts[4];
+                String savedID = parts[0];
                 if (savedID.equals(idToDelete)) {
                     idFound = true;
                 } else {
