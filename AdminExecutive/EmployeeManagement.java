@@ -1,41 +1,54 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package AdminExecutive;
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 
 /**
  *
- * @author 60192
+ * @author Hong Shen
  */
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class EmployeeManagement {
-
-    private String name, contactInfo, department, jobTitle, dateOfHire;
+    private String eID;
+    private String name;
+    private String contactInfo;
+    private String role;
+    private String password;
+    private String workingStatus;
     Scanner input = new Scanner(System.in);
     Scanner search3 = new Scanner(System.in);
     int choice, cont;
     public static final String FILE_NAME4 = "employee.txt";
-    ArrayList<EmployeeManagement> employee = new ArrayList<>(10);
+    public static final String DEFAULT_SECURITYGUARD_ID = "SG00";
+    public static final String DEFAULT_TECHNICIAN_ID = "TC00";
+    public static final String DEFAULT_CLEANER_ID = "CL00";
+    public static final String DEFAULT_OTHER_ID = "EM00";
+    ArrayList<EmployeeManagement> employee = new ArrayList<>();
 
     public EmployeeManagement() {
     }
 
-    public EmployeeManagement(String name, String contactInfo, String department, String jobTitle, String dateOfHire) {
+    public EmployeeManagement(String eID, String name, String contactInfo, String role, String password, String workingStatus) {
+        this.eID = eID;
         this.name = name;
         this.contactInfo = contactInfo;
-        this.department = department;
-        this.jobTitle = jobTitle;
-        this.dateOfHire = dateOfHire;
+        this.role = role;
+        this.password = password;
+        this.workingStatus = workingStatus;
     }
 
+    
     public String getName() {
         return name;
     }
@@ -52,53 +65,39 @@ public class EmployeeManagement {
         this.contactInfo = contactInfo;
     }
 
-    public String getDepartment() {
-        return department;
+    public String getRole() {
+        return role;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setRole(String role) {
+        this.role =role;
     }
 
-    public String getJobTitle() {
-        return jobTitle;
+    public String geteID() {
+        return eID;
     }
 
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
+    public void seteID(String eID) {
+        this.eID = eID;
     }
 
-    public String getDateOfHire() {
-        return dateOfHire;
+    public String getPassword() {
+        return password;
     }
 
-    public void setDateOfHire(String dateOfHire) {
-        this.dateOfHire = dateOfHire;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void newEmployee() {
-        System.out.println("Enter employee name: ");
-        name = input.nextLine();
-        System.out.println("Enter contact information: ");
-        contactInfo = input.nextLine();
-        System.out.println("Enter department: ");
-        department = input.nextLine();
-        System.out.println("Enter job title: ");
-        jobTitle = input.nextLine();
-        System.out.println("Enter date of hire: ");
-        dateOfHire = input.nextLine();
-
+    public String getWorkingStatus() {
+        return workingStatus;
     }
 
-    public void showEmployeeInfo() {
-        System.out.println("Employee Information:");
-        System.out.println("Employee Name: " + getName());
-        System.out.println("Contact information: " + getContactInfo());
-        System.out.println("Department: " + getDepartment());
-        System.out.println("Job title: " + getJobTitle());
-        System.out.println("Date of hire: " + getDateOfHire());
+    public void setWorkingStatus(String workingStatus) {
+        this.workingStatus = workingStatus;
     }
-
+    
+    
     public void runEmployee() {
 
         do {
@@ -133,20 +132,130 @@ public class EmployeeManagement {
         } while (cont != 0);
     }
 
+    
+    /*public void newEmployee() {
+        System.out.println("Enter employee name: ");
+        name = input.nextLine();
+        System.out.println("Enter contact information: ");
+        contactInfo = input.nextLine();
+        System.out.println("Enter employee role: ");
+        role = input.nextLine();
+    }*/
+
+    public static String getLastSGId(){
+        String lastId= DEFAULT_SECURITYGUARD_ID;
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME4))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if(parts.length >= 1 && parts[0].startsWith("SG")){
+                   lastId = parts[0]; 
+                }              
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastId;
+    }
+    
+    
+    public static String generateNewSGId(String lastId){
+        String numericPart = lastId.substring(2); // extract numeric part of ID
+        int newNumericPart = Integer.parseInt(numericPart) + 1; // increment numeric part
+        String newId = "SG" + String.format("%02d", newNumericPart); // combine prefix and new numeric part
+        return newId;
+    }
+    
+    
+    public static String getLastTCId(){
+        String lastId= DEFAULT_TECHNICIAN_ID;
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME4))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if(parts.length >= 1 && parts[0].startsWith("TC")){
+                   lastId = parts[0]; 
+                }              
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastId;
+    }
+    
+    
+    public static String generateNewTCId(String lastId){
+        String numericPart = lastId.substring(2); // extract numeric part of ID
+        int newNumericPart = Integer.parseInt(numericPart) + 1; // increment numeric part
+        String newId = "TC" + String.format("%02d", newNumericPart); // combine prefix and new numeric part
+        return newId;
+    }
+    
+    
+    public static String getLastCLId(){
+        String lastId= DEFAULT_SECURITYGUARD_ID;
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME4))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if(parts.length >= 1 && parts[0].startsWith("CL")){
+                   lastId = parts[0]; 
+                }              
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastId;
+    }
+    
+    
+    public static String generateNewCLId(String lastId){
+        String numericPart = lastId.substring(2); // extract numeric part of ID
+        int newNumericPart = Integer.parseInt(numericPart) + 1; // increment numeric part
+        String newId = "CL" + String.format("%02d", newNumericPart); // combine prefix and new numeric part
+        return newId;
+    }
+    
+    
+    public static String getLastOtherId(){
+        String lastId= DEFAULT_OTHER_ID;
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME4))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if(parts.length >= 1 && parts[0].startsWith("EM")){
+                   lastId = parts[0]; 
+                }              
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastId;
+    }    
+    
+    
+    public static String generateNewOtherId(String lastId){
+        String numericPart = lastId.substring(2); // extract numeric part of ID
+        int newNumericPart = Integer.parseInt(numericPart) + 1; // increment numeric part
+        String newId = "EM" + String.format("%02d", newNumericPart); // combine prefix and new numeric part
+        return newId;
+    }
+    
+    
     public void addEmployee() {
         try {
             try (Scanner scan = new Scanner(new File(FILE_NAME4))) {
-
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     EmployeeManagement newE = new EmployeeManagement();
-                    if (parts.length >= 5) {
-                        newE.setName(parts[0]);
-                        newE.setContactInfo(parts[1]);
-                        newE.setDepartment(parts[2]);
-                        newE.setJobTitle(parts[3]);
-                        newE.setDateOfHire(parts[4]);
+                    if (parts.length >= 6) {
+                        newE.seteID(parts[0]);
+                        newE.setName(parts[1]);
+                        newE.setContactInfo(parts[2]);
+                        newE.setRole(parts[3]);
+                        newE.setPassword(parts[4]);
+                        newE.setWorkingStatus(parts[5]);
                     }
                     employee.add(newE);
                 }
@@ -154,39 +263,97 @@ public class EmployeeManagement {
         } catch (FileNotFoundException e) {
             System.out.println("The file 'employee.txt' was not found.");
         }
-
-        EmployeeManagement newE2 = new EmployeeManagement();
+        
+        System.out.println("Enter employee name: ");
+        name = input.nextLine();
+        System.out.println("Enter contact information: ");
+        contactInfo = input.nextLine();
+        System.out.println("Enter employee role (security guard, technician, cleaner, other): ");
+        role = input.nextLine();
+        if (role.equalsIgnoreCase("security guard")){
+            String lastId = getLastSGId();
+            eID = generateNewSGId(lastId);
+            System.out.println("Enter password: ");
+            password = input.nextLine();
+        }
+        else if(role.equalsIgnoreCase("technician")){
+            String lastId = getLastTCId();
+            eID = generateNewTCId(lastId);
+        }
+        else if(role.equalsIgnoreCase("cleaner")){
+            String lastId = getLastCLId();
+            eID = generateNewCLId(lastId);
+        }
+        else if(role.equalsIgnoreCase("other")){
+            String lastId = getLastOtherId();
+            eID = generateNewOtherId(lastId);
+        }
+        else{
+            System.out.println("Error! Unknown role");
+            return;
+        }
+        workingStatus = "Working";
+        
+        EmployeeManagement newEmployee = new EmployeeManagement(eID, name, contactInfo, role, password,workingStatus);
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME4, true));
+            writer.write(
+                    newEmployee.geteID() +"|"
+                    + newEmployee.getName() + "|"
+                    + newEmployee.getContactInfo() + "|"
+                    + newEmployee.getRole() + "|"
+                    + newEmployee.getPassword() + "|"
+                    + newEmployee.getWorkingStatus() + "\n");
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred while updating the file.");
+        }
+        /*EmployeeManagement newE2 = new EmployeeManagement();
         newE2.newEmployee();
-        employee.add(newE2);
+        employee.add(newE2);*/
 
         //newRT.addToFile();
-        try {
+        /*try {
             try (FileWriter infile = new FileWriter(FILE_NAME4)) {
                 for (int i = 0; i < employee.size(); i++) {
                     infile.append(employee.get(i).getName() + " "
                             + employee.get(i).getContactInfo() + " "
-                            + employee.get(i).getDepartment() + " "
+                            + employee.get(i).getRole() + " "
                             + employee.get(i).getJobTitle() + " "
                             + employee.get(i).getDateOfHire() + "\n");
                 }
             }
         } catch (IOException ev) {
             System.out.println("An error occured when writing into the file.");
-        }
+        }*/
     }
 
+    
+    public void showEmployeeInfo() {
+        System.out.println("Employee Information:");
+        System.out.println("Employee ID: " + geteID());
+        System.out.println("Employee Name: " + getName());
+        System.out.println("Contact information: " + getContactInfo());
+        System.out.println("Employee role: " + getRole());
+        System.out.println("Employee working status: " + getWorkingStatus());
+    }
+    
+    
     public void viewEmployee() {
         try {
             try (Scanner scan = new Scanner(new File(FILE_NAME4))) {
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     EmployeeManagement newE = new EmployeeManagement();
-                    newE.setName(parts[0]);
-                    newE.setContactInfo(parts[1]);
-                    newE.setDepartment(parts[2]);
-                    newE.setJobTitle(parts[3]);
-                    newE.setDateOfHire(parts[4]);
+                    if (parts.length >= 6) {
+                        newE.seteID(parts[0]);
+                        newE.setName(parts[1]);
+                        newE.setContactInfo(parts[2]);
+                        newE.setRole(parts[3]);
+                        newE.setPassword(parts[4]);
+                        newE.setWorkingStatus(parts[5]);
+                    }
                     employee.add(newE);
                 }
             }
@@ -204,14 +371,15 @@ public class EmployeeManagement {
             try (Scanner scan = new Scanner(new File(FILE_NAME4))) {
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     EmployeeManagement newE = new EmployeeManagement();
-                    if (parts.length >= 5) {
-                        newE.setName(parts[0]);
-                        newE.setContactInfo(parts[1]);
-                        newE.setDepartment(parts[2]);
-                        newE.setJobTitle(parts[3]);
-                        newE.setDateOfHire(parts[4]);
+                    if (parts.length >= 6) {
+                        newE.seteID(parts[0]);
+                        newE.setName(parts[1]);
+                        newE.setContactInfo(parts[2]);
+                        newE.setRole(parts[3]);
+                        newE.setPassword(parts[4]);
+                        newE.setWorkingStatus(parts[5]);
                     }
                     employee.add(newE);
                 }
@@ -220,44 +388,50 @@ public class EmployeeManagement {
             System.out.println("The file 'employee.txt' was not found.");
         }
 
-        System.out.print("Enter the employee name: ");
-        String checkName = search3.nextLine();
+        System.out.print("Enter the employee ID: ");
+        String searchID = search3.nextLine();
         boolean found = false;
         for (int a = 0; a < employee.size(); a++) {
-            if (employee.get(a).getName().equalsIgnoreCase(checkName)) {
+            if (employee.get(a).geteID().equalsIgnoreCase(searchID)) {
                 found = true;
                 System.out.println("Select the field you want to modify");
-                System.out.println("1. Contact Information");
-                System.out.println("2. Department");
-                System.out.println("3. Job Title");
-                System.out.println("4. Date of Hire");
-                System.out.println("5. Cancel");
+                System.out.println("1. Employee Name");
+                System.out.println("2. Contact Information");
+                System.out.println("3. Role");
+                System.out.println("4. Password");
+                System.out.println("5. Working Status");
+                System.out.println("6. Cancel");
                 System.out.print("Enter choice: ");
-                int choice = input.nextInt();
+                int choice1 = input.nextInt();
                 input.nextLine();
                 EmployeeManagement e = employee.get(a);
-                switch (choice) {
-                    case 1 -> {
-
-                        System.out.print("Enter new Contact Info: ");
-                        String contactInfo = input.nextLine();
-                        e.setContactInfo(contactInfo);
+                switch (choice1) {
+                    case 1 ->{
+                        System.out.println("Enter new employee name: ");
+                        String newName = input.nextLine();
+                        e.setName(newName);
                     }
                     case 2 -> {
-                        System.out.print("Enter new department: ");
-                        String department = input.nextLine();
-                        e.setDepartment(department);
+
+                        System.out.print("Enter new Contact Info: ");
+                        String newContactInfo = input.nextLine();
+                        e.setContactInfo(newContactInfo);
                     }
                     case 3 -> {
-                        System.out.print("Enter new job title: ");
-                        String jobTitle = input.nextLine();
-                        e.setJobTitle(jobTitle);
+                        System.out.print("Enter new role: ");
+                        String newRole = input.nextLine();
+                        e.setRole(newRole);
+                    }
+                    case 4 -> {
+                        System.out.print("Enter new password: ");
+                        String newPassword = input.nextLine();
+                        e.setPassword(newPassword);
                     }
 
-                    case 4 -> {
-                        System.out.print("Enter new date of hire: ");
-                        String dateOfHire = input.nextLine();
-                        e.setDateOfHire(dateOfHire);
+                    case 5 -> {
+                        System.out.print("Enter new working status: ");
+                        String newWorkingStatus = input.nextLine();
+                        e.setWorkingStatus(newWorkingStatus);
                     }
 
                     default ->
@@ -275,11 +449,13 @@ public class EmployeeManagement {
             try {
                 try (FileWriter infile = new FileWriter(FILE_NAME4)) {
                     for (int i = 0; i < employee.size(); i++) {
-                        infile.append(employee.get(i).getName() + " "
-                                + employee.get(i).getContactInfo() + " "
-                                + employee.get(i).getDepartment() + " "
-                                + employee.get(i).getJobTitle() + " "
-                                + employee.get(i).getDateOfHire() + "\n");
+                        infile.append(
+                                employee.get(i).geteID() + "|"
+                                + employee.get(i).getName() + "|"
+                                + employee.get(i).getContactInfo() + "|"
+                                + employee.get(i).getRole() + "|"
+                                + employee.get(i).getPassword() + "|"
+                                + employee.get(i).getWorkingStatus() + "\n");
                     }
                 }
             } catch (IOException ev) {
@@ -289,4 +465,3 @@ public class EmployeeManagement {
 
     }
 }
-
