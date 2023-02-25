@@ -1,16 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package AdminExecutive;
 
 /**
  *
- * @author 60192
+ * @author Hong Shen
  */
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,21 +19,28 @@ import java.util.Scanner;
 
 public class ComplaintManagement {
 
-    private String complaintID, name, date, complaintType, complaintStatus;
+    private String complaintID;
+    private String id; 
+    private String date; 
+    private String complaintType;
+    private String complaintDetail;
+    private String complaintStatus;
     Scanner input = new Scanner(System.in);
     Scanner search4 = new Scanner(System.in);
     int choice, cont;
     public static final String FILE_NAME5 = "complaints.txt";
-    ArrayList<ComplaintManagement> complaint = new ArrayList<>(10);
+    public static final String DEFAULT_COMPLAINT_ID = "C00";
+    ArrayList<ComplaintManagement> complaint = new ArrayList<>();
 
     public ComplaintManagement() {
     }
 
-    public ComplaintManagement(String complaintID, String name, String date, String complaintType, String complaintStatus) {
+    public ComplaintManagement(String complaintID, String id, String date, String complaintType, String complaintDetail, String complaintStatus) {
         this.complaintID = complaintID;
-        this.name = name;
+        this.id = id;
         this.date = date;
         this.complaintType = complaintType;
+        this.complaintDetail = complaintDetail;
         this.complaintStatus = complaintStatus;
     }
 
@@ -44,12 +52,12 @@ public class ComplaintManagement {
         this.complaintID = complaintID;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getDate() {
@@ -68,6 +76,14 @@ public class ComplaintManagement {
         this.complaintType = complaintType;
     }
 
+    public String getComplaintDetail() {
+        return complaintDetail;
+    }
+
+    public void setComplaintDetail(String complaintDetail) {
+        this.complaintDetail = complaintDetail;
+    }
+
     public String getComplaintStatus() {
         return complaintStatus;
     }
@@ -76,30 +92,7 @@ public class ComplaintManagement {
         this.complaintStatus = complaintStatus;
     }
 
-    public void newComplaint() {
-        System.out.println("Enter complaintID: ");
-        complaintID = input.nextLine();
-        System.out.println("Enter customer name: ");
-        name = input.nextLine();
-        System.out.println("Enter date of complaint: ");
-        date = input.nextLine();
-        System.out.println("Enter complaint type: ");
-        complaintType = input.nextLine();
-        System.out.println("Enter complaint status: ");
-        complaintStatus = input.nextLine();
-
-    }
-
-    public void showComplaintInfo() {
-        System.out.println("Complaints: ");
-        System.out.println("Complaint ID: " + getComplaintID());
-        System.out.println("Customer Name: " + getName());
-        System.out.println("Date of complaint: " + getDate());
-        System.out.println("Type of complaint: " + getComplaintType());
-        System.out.println("Complaint Status: " + getComplaintStatus());
-
-    }
-
+    
     public void runComplaint() {
 
         do {
@@ -133,6 +126,57 @@ public class ComplaintManagement {
 
         } while (cont != 0);
     }
+    
+    
+    public static String getLastComplaintId(){
+        String lastId= DEFAULT_COMPLAINT_ID;
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME5))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                lastId = parts[0];
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastId;
+    }
+    
+    
+    public static String generateNewComplaintId(String lastId){
+        String numericPart = lastId.substring(1); // extract numeric part of ID
+        int newNumericPart = Integer.parseInt(numericPart) + 1; // increment numeric part
+        String newId = "C" + String.format("%02d", newNumericPart); // combine prefix and new numeric part
+        return newId;
+    }
+    
+    
+    public void newComplaint() {
+        String lastId=getLastComplaintId();
+        complaintID = generateNewComplaintId(lastId);
+        System.out.println("Enter User ID: ");
+        id = input.nextLine();
+        System.out.println("Enter date of complaint: ");
+        date = input.nextLine();
+        System.out.println("Enter complaint type: ");
+        complaintType = input.nextLine();
+        System.out.println("Enter complaint's details: ");
+        complaintDetail = input.nextLine();       
+        complaintStatus = "Pending";
+    }
+
+    
+    public void showComplaintInfo() {
+        System.out.println("\nComplaints: ");
+        System.out.println("Complaint ID: " + getComplaintID());
+        System.out.println("User ID: " + getId());
+        System.out.println("Date of complaint: " + getDate());
+        System.out.println("Type of complaint: " + getComplaintType());
+        System.out.println("Details of complaint: " + getComplaintDetail());
+        System.out.println("Complaint Status: " + getComplaintStatus());
+    }
+
+    
 
     public void addComplaint() {
         try {
@@ -140,14 +184,15 @@ public class ComplaintManagement {
 
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     ComplaintManagement newC = new ComplaintManagement();
-                    if (parts.length >= 5) {
+                    if (parts.length >= 6) {
                         newC.setComplaintID(parts[0]);
-                        newC.setName(parts[1]);
+                        newC.setId(parts[1]);
                         newC.setDate(parts[2]);
                         newC.setComplaintType(parts[3]);
-                        newC.setComplaintStatus(parts[4]);
+                        newC.setComplaintDetail(parts[4]);
+                        newC.setComplaintStatus(parts[5]);
                     }
                     complaint.add(newC);
                 }
@@ -160,14 +205,15 @@ public class ComplaintManagement {
         newC2.newComplaint();
         complaint.add(newC2);
 
-        //newRT.addToFile();
         try {
             try (FileWriter infile = new FileWriter(FILE_NAME5)) {
                 for (int i = 0; i < complaint.size(); i++) {
-                    infile.append(complaint.get(i).getComplaintID() + " "
-                            + complaint.get(i).getName() + " "
-                            + complaint.get(i).getDate() + " "
-                            + complaint.get(i).getComplaintType() + " "
+                    infile.append(
+                            complaint.get(i).getComplaintID() + "|"
+                            + complaint.get(i).getId() + "|"
+                            + complaint.get(i).getDate() + "|"
+                            + complaint.get(i).getComplaintType() + "|"
+                            + complaint.get(i).getComplaintDetail() + "|"
                             + complaint.get(i).getComplaintStatus() + "\n");
                 }
             }
@@ -176,18 +222,20 @@ public class ComplaintManagement {
         }
     }
 
+    
     public void viewComplaint() {
         try {
             try (Scanner scan = new Scanner(new File(FILE_NAME5))) {
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     ComplaintManagement newC = new ComplaintManagement();
                     newC.setComplaintID(parts[0]);
-                    newC.setName(parts[1]);
+                    newC.setId(parts[1]);
                     newC.setDate(parts[2]);
                     newC.setComplaintType(parts[3]);
-                    newC.setComplaintStatus(parts[4]);
+                    newC.setComplaintDetail(parts[4]);
+                    newC.setComplaintStatus(parts[5]);
                     complaint.add(newC);
                 }
             }
@@ -205,14 +253,15 @@ public class ComplaintManagement {
             try (Scanner scan = new Scanner(new File(FILE_NAME5))) {
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     ComplaintManagement newC = new ComplaintManagement();
-                    if (parts.length >= 5) {
+                    if (parts.length >= 6) {
                         newC.setComplaintID(parts[0]);
-                        newC.setName(parts[1]);
+                        newC.setId(parts[1]);
                         newC.setDate(parts[2]);
                         newC.setComplaintType(parts[3]);
-                        newC.setComplaintStatus(parts[4]);
+                        newC.setComplaintDetail(parts[4]);
+                        newC.setComplaintStatus(parts[5]);
                     }
                     complaint.add(newC);
                 }
@@ -228,37 +277,43 @@ public class ComplaintManagement {
             if (complaint.get(a).getComplaintID().equalsIgnoreCase(checkComplaintID)) {
                 found = true;
                 System.out.println("Select the field you want to modify");
-                System.out.println("1. Customer Name");
+                System.out.println("1. User ID");
                 System.out.println("2. Date");
                 System.out.println("3. Type of Complaint");
-                System.out.println("4. Status of Complaint");
-                System.out.println("5. Cancel");
+                System.out.println("4. Detail of Complaint");
+                System.out.println("5. Status of Complaint");
+                System.out.println("6. Cancel");
                 System.out.print("Enter choice: ");
-                int choice = input.nextInt();
+                int choice1 = input.nextInt();
                 input.nextLine();
                 ComplaintManagement c = complaint.get(a);
-                switch (choice) {
+                switch (choice1) {
                     case 1 -> {
 
                         System.out.print("Enter new customer name: ");
-                        String name = input.nextLine();
-                        c.setName(name);
+                        String newId = input.nextLine();
+                        c.setId(newId);
                     }
                     case 2 -> {
                         System.out.print("Enter new date: ");
-                        String date = input.nextLine();
-                        c.setDate(date);
+                        String newDate = input.nextLine();
+                        c.setDate(newDate);
                     }
                     case 3 -> {
                         System.out.print("Enter new type of complaint: ");
-                        String complaintType = input.nextLine();
-                        c.setComplaintType(complaintType);
+                        String newComplaintType = input.nextLine();
+                        c.setComplaintType(newComplaintType);
+                    }
+                    case 4-> {
+                        System.out.println("Enter new details of complaint: ");
+                        String newComplaintDetail=input.nextLine();
+                        c.setComplaintDetail(newComplaintDetail);
                     }
 
-                    case 4 -> {
+                    case 5 -> {
                         System.out.print("Enter new status of complaint: ");
-                        String complaintStatus = input.nextLine();
-                        c.setComplaintStatus(complaintStatus);
+                        String newComplaintStatus = input.nextLine();
+                        c.setComplaintStatus(newComplaintStatus);
                     }
 
                     default ->
@@ -276,11 +331,13 @@ public class ComplaintManagement {
             try {
                 try (FileWriter infile = new FileWriter(FILE_NAME5)) {
                     for (int i = 0; i < complaint.size(); i++) {
-                        infile.append(complaint.get(i).getComplaintID() + " "
-                                + complaint.get(i).getName() + " "
-                                + complaint.get(i).getDate() + " "
-                                + complaint.get(i).getComplaintType() + " "
-                                + complaint.get(i).getComplaintStatus() + "\n");
+                        infile.append(
+                                complaint.get(i).getComplaintID() + "|"
+                            + complaint.get(i).getId() + "|"
+                            + complaint.get(i).getDate() + "|"
+                            + complaint.get(i).getComplaintType() + "|"
+                            + complaint.get(i).getComplaintDetail() + "|"
+                            + complaint.get(i).getComplaintStatus() + "\n");
                     }
                 }
             } catch (IOException ev) {
@@ -290,4 +347,3 @@ public class ComplaintManagement {
 
     }
 }
-
