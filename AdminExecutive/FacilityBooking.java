@@ -220,7 +220,7 @@ public class FacilityBooking extends FacilityManagement {
     
     
     public void showBookingInfo() {
-        System.out.println("Booking Information:");
+        System.out.println("\nBooking Information:");
         System.out.println("Booking ID: "+ getBookId());
         System.out.println("Booked By: " + getId());
         System.out.println("Facility Name: " + getFacilityName());
