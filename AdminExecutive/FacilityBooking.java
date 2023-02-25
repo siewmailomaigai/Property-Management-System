@@ -15,6 +15,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -24,48 +28,53 @@ import java.util.Scanner;
  */
 public class FacilityBooking extends FacilityManagement {
 
-    private String bookingDate;
-    private int startTime;
-    private int endTime;
+    private String bookId;
     private String id;
+    private LocalDate bookingDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
     public static final String FILE_NAME3 = "facilitybooking.txt";
-    ArrayList<FacilityBooking> facilityB = new ArrayList<>(10);
+    public static final String DEFAULT_BOOKING_ID = "FB00";
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Format for date input
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm"); // Format for time input
+    ArrayList<FacilityBooking> facilityB = new ArrayList<>();
 
     public FacilityBooking() {
         super();
     }
 
-    public FacilityBooking(String facilityName, int capacity, String bookingDate, int startTime, int endTime, String id) {
+    public FacilityBooking(String bookId, String id, String facilityName, LocalDate bookingDate, LocalTime startTime, LocalTime endTime) {
         super();
+        this.bookId = bookId;
+        this.id = id;
         this.facilityName = facilityName;
-        this.capacity = capacity;
         this.bookingDate = bookingDate;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.id = id;
     }
-
-    public String getBookingDate() {
+    
+    
+    public LocalDate getBookingDate() {
         return bookingDate;
     }
 
-    public void setBookingDate(String bookingDate) {
+    public void setBookingDate(LocalDate bookingDate) {
         this.bookingDate = bookingDate;
     }
 
-    public int getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(int startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public int getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(int endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
@@ -76,35 +85,17 @@ public class FacilityBooking extends FacilityManagement {
     public void setId(String id) {
         this.id = id;
     }
-
-    public void newFacilityB() {
-        System.out.println("ID : ");
-        id = input.nextLine();
-        System.out.println("Enter facility name(gym, basketball court, pool, snooker): ");
-        facilityName = input.nextLine();
-        System.out.println("Enter booking date: ");
-        bookingDate = input.nextLine();
-        System.out.println("Enter start time: ");
-        startTime = input.nextInt();
-        System.out.println("Enter end time: ");
-        endTime = input.nextInt();
-        input.nextLine();
-        
+    
+    public String getBookId() {
+        return bookId;
     }
 
-    public void showBookingInfo() {
-        System.out.println("Booking Information:");
-        System.out.println("Booked By: " + getId());
-        System.out.println("Facility Name: " + getFacilityName());
-        System.out.println("Date: " + getBookingDate());
-        System.out.println("Start Time: " + getStartTime());
-        System.out.println("End Time: " + getEndTime());        
-        System.out.println("\n");
-
+    public void setBookId(String bookId) {
+        this.bookId = bookId;
     }
-
+    
+    
     public void runFacilityBooking() {
-
         do {
             System.out.println("1.New booking\n2.View bookings\n3.Update booking\n4.Delete booking");
             choice = input.nextInt();
@@ -114,48 +105,77 @@ public class FacilityBooking extends FacilityManagement {
                 case 1 -> {
                     FacilityBooking add = new FacilityBooking();
                     add.addFacilityB();
-
                 }
-
                 case 2 -> {
                     FacilityBooking view = new FacilityBooking();
                     view.viewFacilityB();
-
                 }
                 case 3 -> {
                     FacilityBooking update = new FacilityBooking();
                     update.updateFacilityB();
-
                 }
                 case 4 -> {
                     FacilityBooking delete = new FacilityBooking();
                     delete.deleteFacilityB();
                 }
-
                 default ->
                     System.out.println("\nWrong input! Please try again!");
             }
-
             System.out.println("\nPlease Press 1 to Return to Back and Press 0 for Return to Main Menu.");
             cont = input.nextInt();
-
         } while (cont != 0);
     }
 
+                 
+    public static String getLastBookingId(){
+        String lastId= DEFAULT_BOOKING_ID;
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME3))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                lastId = parts[0];
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastId;
+    }
+    
+    
+    public static String generateNewBookingId(String lastId){
+        String numericPart = lastId.substring(2); // extract numeric part of ID
+        int newNumericPart = Integer.parseInt(numericPart) + 1; // increment numeric part
+        String newId = "FB" + String.format("%02d", newNumericPart); // combine prefix and new numeric part
+        return newId;
+    }
+    
+       
+    public static boolean checkOverlap(ArrayList<FacilityBooking> bookings,String facilityName, LocalDate bookingDate, LocalTime startTime, LocalTime endTime) {
+        for (FacilityBooking booking : bookings) {
+            if (booking.getFacilityName().equalsIgnoreCase(facilityName) && booking.getBookingDate().equals(bookingDate) &&
+                    ((booking.getStartTime().isBefore(startTime) && booking.getEndTime().isAfter(startTime)) ||
+                            (booking.getStartTime().isBefore(endTime) && booking.getEndTime().isAfter(endTime)))) {
+                return true; // Booking overlaps with existing booking
+            }
+        }
+        return false; // No overlap found
+    }
+    
+    
     public void addFacilityB() {
         try {
             Scanner scan = new Scanner(new File(FILE_NAME3));
             while (scan.hasNextLine()) {
                 String line = scan.nextLine();
-                String[] parts = line.split(" ");
+                String[] parts = line.split("\\|");
                 FacilityBooking newFacb = new FacilityBooking();
                 if (parts.length >= 5) {
-                    newFacb.setId(parts[0]);
-                    newFacb.setFacilityName(parts[1]);
-                    newFacb.setBookingDate(parts[2]);
-                    newFacb.setStartTime(Integer.parseInt(parts[3]));
-                    newFacb.setEndTime(Integer.parseInt(parts[4]));
-                    
+                    newFacb.setBookId(parts[0]);
+                    newFacb.setId(parts[1]);
+                    newFacb.setFacilityName(parts[2]);
+                    newFacb.setBookingDate(LocalDate.parse(parts[3], DATE_FORMATTER));
+                    newFacb.setStartTime(LocalTime.parse(parts[4],TIME_FORMATTER ));
+                    newFacb.setEndTime(LocalTime.parse(parts[5], TIME_FORMATTER));                   
                 }
                 facilityB.add(newFacb);
             }
@@ -163,55 +183,73 @@ public class FacilityBooking extends FacilityManagement {
         } catch (FileNotFoundException e) {
             System.out.println("The file 'facilitybooking.txt' was not found.");
         }
+        
+        String lastId = getLastBookingId();
+        bookId = generateNewBookingId(lastId);
+        System.out.println("Resident/Tenant ID : ");
+        id = input.nextLine();
+        System.out.println("Enter facility name(gym, basketball court, pool, snooker): ");
+        facilityName = input.nextLine();
+        System.out.println("Enter booking date (yyyy-MM-dd): ");
+        bookingDate = LocalDate.parse(input.nextLine(), DATE_FORMATTER);
+        System.out.println("Enter start time (HH:mm): ");
+        startTime = LocalTime.parse(input.nextLine(), TIME_FORMATTER);
+        System.out.println("Enter end time (HH:mm): ");
+        endTime = LocalTime.parse(input.nextLine(), TIME_FORMATTER);
 
-        FacilityBooking newFacb2 = new FacilityBooking();
-        newFacb2.newFacilityB();
-
-        int count = 0;
-        for (FacilityBooking fb : facilityB) {
-            if (fb.getFacilityName().equals(newFacb2.getFacilityName())) {
-                count++;
-            }
-        }
-
-        if (count >= FacilityManagement.MAX_CAPACITY) {
-            System.out.println("Sorry, the facility is fully booked.");
+        if (checkOverlap(facilityB, facilityName, bookingDate, startTime, endTime)) {
+            System.out.println("Booking overlap detected. Please choose a different date and time.");
             return;
         }
-
-        facilityB.add(newFacb2);
+ 
+        FacilityBooking newFacb2 = new FacilityBooking(bookId,id,facilityName,bookingDate,startTime,endTime);         
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME3, true));
             writer.write(
-                    newFacb2.getId() +" "
-                    + newFacb2.getFacilityName() + " "
-                    + newFacb2.getBookingDate() + " "
-                    + newFacb2.getStartTime() + " "
+                    newFacb2.getBookId() +"|"
+                    + newFacb2.getId() + "|"
+                    + newFacb2.getFacilityName() + "|"
+                    + newFacb2.getBookingDate() + "|"
+                    + newFacb2.getStartTime() + "|"
                     + newFacb2.getEndTime() + "\n");
             writer.close();
         } catch (IOException e) {
             System.out.println("An error occurred while updating the file.");
         }
     }
-
+    
+    
+    public void showBookingInfo() {
+        System.out.println("Booking Information:");
+        System.out.println("Booking ID: "+ getBookId());
+        System.out.println("Booked By: " + getId());
+        System.out.println("Facility Name: " + getFacilityName());
+        System.out.println("Booking Date: " + getBookingDate());
+        System.out.println("Start Time: " + getStartTime());
+        System.out.println("End Time: " + getEndTime());        
+        System.out.println("\n");
+    }
+    
+    
     public void viewFacilityB() {
         try {
-            try (Scanner scan = new Scanner(new File(FILE_NAME3))) {
-                while (scan.hasNextLine()) {
-                    String line = scan.nextLine();
-                    String[] parts = line.split(" ");
-                    FacilityBooking newFacb = new FacilityBooking();
-                    if (parts.length >= 5) {
-                        newFacb.setId(parts[0]);
-                        newFacb.setFacilityName(parts[1]);
-                        newFacb.setBookingDate(parts[2]);
-                        newFacb.setStartTime(Integer.parseInt(parts[3]));
-                        newFacb.setEndTime(Integer.parseInt(parts[4]));
-                    }
-                    facilityB.add(newFacb);
+            Scanner scan = new Scanner(new File(FILE_NAME3));
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+                String[] parts = line.split("\\|");
+                FacilityBooking newFacb = new FacilityBooking();
+                if (parts.length >= 5) {
+                    newFacb.setBookId(parts[0]);
+                    newFacb.setId(parts[1]);
+                    newFacb.setFacilityName(parts[2]);
+                    newFacb.setBookingDate(LocalDate.parse(parts[3], DATE_FORMATTER));
+                    newFacb.setStartTime(LocalTime.parse(parts[4],TIME_FORMATTER ));
+                    newFacb.setEndTime(LocalTime.parse(parts[5], TIME_FORMATTER));                   
                 }
+                facilityB.add(newFacb);
             }
+            scan.close();
         } catch (FileNotFoundException e) {
             System.out.println("The file 'facilitybooking.txt' was not found.");
         }
@@ -221,66 +259,72 @@ public class FacilityBooking extends FacilityManagement {
         }
     }
 
+    
     public void updateFacilityB() {
         try {
-            try (Scanner scan = new Scanner(new File(FILE_NAME3))) {
-                while (scan.hasNextLine()) {
-                    String line = scan.nextLine();
-                    String[] parts = line.split(" ");
-                    FacilityBooking newFacb = new FacilityBooking();
-                    if (parts.length >= 5) {
-                        newFacb.setId(parts[0]);
-                        newFacb.setFacilityName(parts[1]);
-                        newFacb.setBookingDate(parts[2]);
-                        newFacb.setStartTime(Integer.parseInt(parts[3]));
-                        newFacb.setEndTime(Integer.parseInt(parts[4]));
-                    }
-
-                    facilityB.add(newFacb);
+            Scanner scan = new Scanner(new File(FILE_NAME3));
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+                String[] parts = line.split("\\|");
+                FacilityBooking newFacb = new FacilityBooking();
+                if (parts.length >= 5) {
+                    newFacb.setBookId(parts[0]);
+                    newFacb.setId(parts[1]);
+                    newFacb.setFacilityName(parts[2]);
+                    newFacb.setBookingDate(LocalDate.parse(parts[3], DATE_FORMATTER));
+                    newFacb.setStartTime(LocalTime.parse(parts[4],TIME_FORMATTER ));
+                    newFacb.setEndTime(LocalTime.parse(parts[5], TIME_FORMATTER));                   
                 }
+                facilityB.add(newFacb);
             }
+            scan.close();
         } catch (FileNotFoundException e) {
             System.out.println("The file 'facilitybooking.txt' was not found.");
         }
 
-        System.out.print("ID? : ");
+        System.out.print("Enter the Booking ID : ");
         String checkId = search2.nextLine();
         boolean found = false;
         for (int a = 0; a < facilityB.size(); a++) {
-            if (facilityB.get(a).getId().equalsIgnoreCase(checkId)) {
+            if (facilityB.get(a).getBookId().equalsIgnoreCase(checkId)) {
                 found = true;
                 System.out.println("Select the field you want to modify");
-                System.out.println("1. Facility Name");
-                System.out.println("2. Booking Date");
-                System.out.println("3. Start Time");
-                System.out.println("4. End Time");
-                System.out.println("5. Cancel");
+                System.out.println("1. ID");
+                System.out.println("2. Facility Name");
+                System.out.println("3. Booking Date");
+                System.out.println("4. Start Time");
+                System.out.println("5. End Time");
+                System.out.println("6. Cancel");
                 System.out.print("Enter choice: ");
-                int choice = input.nextInt();
+                int choice1 = input.nextInt();
                 input.nextLine();
                 FacilityBooking facb = facilityB.get(a);
-                switch (choice) {
-
+                switch (choice1) {
                     case 1 -> {
-                        System.out.print("Enter new facility name: ");
-                        String facilityName = input.nextLine();
-                        facb.setFacilityName(facilityName);
+                        System.out.println("Enter new Resident/Tenant ID: ");
+                        String newId = input.nextLine();
+                        facb.setId(newId);
                     }
                     case 2 -> {
-
-                        System.out.print("Enter new Booking Date: ");
-                        String bookingDate = input.nextLine();
-                        facb.setBookingDate(bookingDate);
+                        System.out.print("Enter new facility name: ");
+                        String newFacilityName = input.nextLine();
+                        facb.setFacilityName(newFacilityName);
                     }
                     case 3 -> {
-                        System.out.print("Enter new Start Time: ");
-                        int startTime = input.nextInt();
-                        facb.setStartTime(startTime);
+
+                        System.out.print("Enter new Booking Date: ");
+                        LocalDate newBookingDate = LocalDate.parse(input.nextLine(), DATE_FORMATTER);
+                        facb.setBookingDate(newBookingDate);
                     }
                     case 4 -> {
+                        System.out.print("Enter new Start Time: ");
+                        LocalTime newStartTime = LocalTime.parse(input.nextLine(), TIME_FORMATTER);
+                        facb.setStartTime(newStartTime);
+                    }
+                    case 5 -> {
                         System.out.print("Enter new End Time: ");
-                        int endTime = input.nextInt();
-                        facb.setEndTime(endTime);
+                        LocalTime newEndTime = LocalTime.parse(input.nextLine(), TIME_FORMATTER);
+                        facb.setEndTime(newEndTime);
                     }
 
                     default ->
@@ -299,10 +343,11 @@ public class FacilityBooking extends FacilityManagement {
                 try (FileWriter infile = new FileWriter(FILE_NAME3)) {
                     for (int i = 0; i < facilityB.size(); i++) {
                         infile.append(
-                                facilityB.get(i).getId() + " "
-                                + facilityB.get(i).getFacilityName() + " "
-                                + facilityB.get(i).getBookingDate() + " "
-                                + facilityB.get(i).getStartTime() + " "
+                                facilityB.get(i).getBookId() + "|"
+                                + facilityB.get(i).getId() + "|"
+                                + facilityB.get(i).getFacilityName() + "|"
+                                + facilityB.get(i).getBookingDate() + "|"
+                                + facilityB.get(i).getStartTime() + "|"
                                 + facilityB.get(i).getEndTime() + "\n");
                     }
                 }
@@ -312,20 +357,21 @@ public class FacilityBooking extends FacilityManagement {
         }
     }
 
+    
     public void deleteFacilityB() {
-        System.out.print("Enter ID to be deleted: ");
+        System.out.print("Enter Booking ID to be deleted: ");
         Scanner scan = new Scanner(System.in);
-        String IdToDelete = scan.nextLine();
+        String bookIdDelete = scan.nextLine();
 
         StringBuilder contentBuilder = new StringBuilder();
-        boolean residentFound = false;
+        boolean bookIdFound = false;
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME3))) {
             String currentLine;
             while ((currentLine = br.readLine()) != null) {
-                String[] parts = currentLine.split(" ");
+                String[] parts = currentLine.split("\\|");
                 String savedId = (parts[0]);
-                if (savedId.equals(IdToDelete)) {
-                    residentFound = true;
+                if (savedId.equals(bookIdDelete)) {
+                    bookIdFound = true;
                 } else {
                     contentBuilder.append(currentLine).append("\n");
                 }
@@ -334,8 +380,8 @@ public class FacilityBooking extends FacilityManagement {
             e.printStackTrace();
         }
 
-        if (!residentFound) {
-            System.out.println("Person with name " + IdToDelete + " was not found.");
+        if (!bookIdFound) {
+            System.out.println("Person with name " + bookIdDelete + " was not found.");
             return;
         }
 
@@ -345,7 +391,7 @@ public class FacilityBooking extends FacilityManagement {
             e.printStackTrace();
         }
 
-        System.out.println("Deleted the person with ID: " + IdToDelete);
+        System.out.println("Deleted the person with ID: " + bookIdDelete);
     }
 
 }
