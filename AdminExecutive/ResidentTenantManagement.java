@@ -23,17 +23,16 @@ import java.util.ArrayList;
  *
  * @author 60192
  */
-
 public class ResidentTenantManagement {
 
     private String id;
     private String name;
     private int age;
-    private int floor;
-    private int unit;
+    private String unit;
     private String password;
     public static final String FILE_NAME = "residentfile.txt";
-    ArrayList<ResidentTenantManagement> resident_tenant = new ArrayList<>(20);
+    public static final String DEFAULT_RESIDENT_ID = "R00";
+    ArrayList<ResidentTenantManagement> resident_tenant = new ArrayList<>();
 
     Scanner input = new Scanner(System.in);
     Scanner search = new Scanner(System.in);
@@ -44,12 +43,11 @@ public class ResidentTenantManagement {
     }
 
     //constructor with arguments
-    ResidentTenantManagement(String id, String name, int age, String password,int floor, int unit) {
+    ResidentTenantManagement(String id, String name, int age, String password, String unit) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.password=password;
-        this.floor = floor;
         this.unit = unit;       
     }
 
@@ -65,11 +63,7 @@ public class ResidentTenantManagement {
         return age;
     }
 
-    public int getFloor() {
-        return floor;
-    }
-
-    public int getUnit() {
+    public String getUnit() {
         return unit;
     }
 
@@ -90,11 +84,7 @@ public class ResidentTenantManagement {
         this.age = age;
     }
 
-    public void setFloor(int floor) {
-        this.floor = floor;
-    }
-
-    public void setUnit(int unit) {
+    public void setUnit(String unit) {
         this.unit = unit;
     }
 
@@ -105,7 +95,7 @@ public class ResidentTenantManagement {
 
     @Override
     public String toString() {
-        return "ResidentTenant{id=" + id + ", name=" + name + ", age=" + age + ", floor=" + floor + ", unit=" + unit + "}";
+        return "ResidentTenant{id=" + id + ", name=" + name + ", age=" + age + ", unit=" + unit + "}";
     }
 
     public void runResident() {
@@ -136,6 +126,10 @@ public class ResidentTenantManagement {
                     view.viewResident();
 
                 }
+                case 5 -> {
+                    ResidentTenantManagement delete = new ResidentTenantManagement();
+                    delete.deleteResident();
+                }
 
                 default ->
                     System.out.println("\nWrong input! Please try again!");
@@ -147,9 +141,31 @@ public class ResidentTenantManagement {
         } while (cont != 0);
     }
 
+    public static String getLastResidnetId(){
+        String lastId= DEFAULT_RESIDENT_ID;
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                lastId = parts[0];
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastId;
+    }
+    
+    
+    public static String generateNewResidentId(String lastId){
+        String numericPart = lastId.substring(1); // extract numeric part of ID
+        int newNumericPart = Integer.parseInt(numericPart) + 1; // increment numeric part
+        String newId = "R" + String.format("%02d", newNumericPart); // combine prefix and new numeric part
+        return newId;
+    }
+    
     public void newResident_Tenant() {
-        System.out.println("Enter Resident/Tenant ID: ");
-        id = input.nextLine();
+        String lastId=getLastResidnetId();
+        id=generateNewResidentId(lastId);
         System.out.println("Enter Resident/Tenant name: ");
         name = input.nextLine();
         System.out.println("Enter Resident/Tenant password: ");
@@ -157,11 +173,8 @@ public class ResidentTenantManagement {
         System.out.println("Enter Resident/Tenant age: ");
         age = input.nextInt();
         input.nextLine();
-        System.out.println("Enter Resident/Tenant floor: ");
-        floor = input.nextInt();
-        input.nextLine();
         System.out.println("Enter Resident/Tenant unit: ");
-        unit = input.nextInt();
+        unit = input.nextLine();
         
 
     }
@@ -171,7 +184,6 @@ public class ResidentTenantManagement {
         System.out.println("ID: " + getId());
         System.out.println("Name: " + getName());
         System.out.println("Age: " + getAge());
-        System.out.println("Floor: " + getFloor());
         System.out.println("Unit: " + getUnit());
     }
 
@@ -180,15 +192,13 @@ public class ResidentTenantManagement {
             try (Scanner scan = new Scanner(new File(FILE_NAME))) {
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     ResidentTenantManagement newRT = new ResidentTenantManagement();
                     newRT.setId(parts[0]);
                     newRT.setName(parts[1]);
                     newRT.setPassword(parts[2]);
                     newRT.setAge(Integer.parseInt(parts[3]));
-                    newRT.setFloor(Integer.parseInt(parts[4]));
-                    newRT.setUnit(Integer.parseInt(parts[5]));
-                    //newRT.setPassword(parts[5]);
+                    newRT.setUnit(parts[4]);
                     resident_tenant.add(newRT);
                 }
             }
@@ -204,11 +214,10 @@ public class ResidentTenantManagement {
         try {
             try (FileWriter infile = new FileWriter(FILE_NAME)) {
                 for (int i = 0; i < resident_tenant.size(); i++) {
-                    infile.append(resident_tenant.get(i).getId() + " "
-                            + resident_tenant.get(i).getName() + " "
-                            + resident_tenant.get(i).getPassword() + " "
-                            + resident_tenant.get(i).getAge() + " "
-                            + resident_tenant.get(i).getFloor() + " "
+                    infile.append(resident_tenant.get(i).getId() + "|"
+                            + resident_tenant.get(i).getName() + "|"
+                            + resident_tenant.get(i).getPassword() + "|"
+                            + resident_tenant.get(i).getAge() + "|"
                             + resident_tenant.get(i).getUnit() + "\n");
                 }
             }
@@ -222,14 +231,13 @@ public class ResidentTenantManagement {
             try (Scanner scan = new Scanner(new File(FILE_NAME))) {
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     ResidentTenantManagement newRT = new ResidentTenantManagement();
                     newRT.setId(parts[0]);
                     newRT.setName(parts[1]);
                     newRT.setPassword(parts[2]);
                     newRT.setAge(Integer.parseInt(parts[3]));
-                    newRT.setFloor(Integer.parseInt(parts[4]));
-                    newRT.setUnit(Integer.parseInt(parts[5]));
+                    newRT.setUnit(parts[4]);
                     resident_tenant.add(newRT);
                 }
             }
@@ -247,14 +255,13 @@ public class ResidentTenantManagement {
                 System.out.println("1. Name");
                 System.out.println("2. Password");
                 System.out.println("3. Age");
-                System.out.println("4. Floor");
-                System.out.println("5. Unit");
-                System.out.println("6. Cancel");
+                System.out.println("4. Unit");
+                System.out.println("5. Cancel");
                 System.out.print("Enter choice: ");
-                int choice = input.nextInt();
+                int choice1 = input.nextInt();
                 input.nextLine();
                 ResidentTenantManagement resident = resident_tenant.get(a);
-                switch (choice) {
+                switch (choice1) {
                     case 1 -> {
                         System.out.print("Enter new name: ");
                         String new_name = input.nextLine();
@@ -272,18 +279,12 @@ public class ResidentTenantManagement {
                         resident.setAge(new_age);
                     }
                     case 4 -> {
-                        System.out.print("Enter new floor: ");
-                        int new_floor = input.nextInt();
-                        input.nextLine();
-                        resident.setFloor(new_floor);
-                    }
-                    case 5 -> {
                         System.out.print("Enter new unit: ");
-                        int new_unit = input.nextInt();
+                        String new_unit = input.nextLine();
                         input.nextLine();
                         resident.setUnit(new_unit);
                     } 
-                    case 6 -> {
+                    case 5 -> {
                         System.out.println("Modification canceled.");
                         return;
                     }
@@ -302,11 +303,10 @@ public class ResidentTenantManagement {
             try {
                 try (FileWriter infile = new FileWriter(FILE_NAME)) {
                     for (int i = 0; i < resident_tenant.size(); i++) {
-                        infile.append(resident_tenant.get(i).getId() + " "
-                                + resident_tenant.get(i).getName() + " "
-                            + resident_tenant.get(i).getPassword() + " "
-                            + resident_tenant.get(i).getAge() + " "
-                            + resident_tenant.get(i).getFloor() + " "
+                        infile.append(resident_tenant.get(i).getId() + "|"
+                                + resident_tenant.get(i).getName() + "|"
+                            + resident_tenant.get(i).getPassword() + "|"
+                            + resident_tenant.get(i).getAge() + "|"
                             + resident_tenant.get(i).getUnit() + "\n");
                     }
                 }
@@ -321,14 +321,13 @@ public class ResidentTenantManagement {
             try (Scanner scan = new Scanner(new File(FILE_NAME))) {
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     ResidentTenantManagement newRT = new ResidentTenantManagement();
                     newRT.setId(parts[0]);
                     newRT.setName(parts[1]);
                     newRT.setPassword(parts[2]);
                     newRT.setAge(Integer.parseInt(parts[3]));
-                    newRT.setFloor(Integer.parseInt(parts[4]));
-                    newRT.setUnit(Integer.parseInt(parts[5]));
+                    newRT.setUnit(parts[4]);
                     resident_tenant.add(newRT);
                 }
             }
@@ -336,20 +335,20 @@ public class ResidentTenantManagement {
             System.out.println("The file 'resident_file.txt' was not found.");
         }
 
-        System.out.print("Enter the resident name: ");
-        String checkName = search.nextLine();
+        System.out.print("Enter the resident ID: ");
+        String savedId = search.nextLine();
         boolean foundResident = false;
         for (int a = 0; a < resident_tenant.size(); a++) {
-            if (checkName.equals(resident_tenant.get(a).getName())) {
+            if (savedId.equals(resident_tenant.get(a).getId())) {
                 if (!foundResident) {
-                    System.out.println("Residents with the name " + checkName + ":");
+                    System.out.println("Residents with the ID " + savedId + ":");
                     foundResident = true;
                 }
                 resident_tenant.get(a).showResidentInfo();
             }
         }
         if (!foundResident) {
-            System.out.println("No residents with the name " + checkName + ".");
+            System.out.println("No residents with the ID " + savedId + ".");
         }
 
     }
@@ -359,14 +358,13 @@ public class ResidentTenantManagement {
             try (Scanner scan = new Scanner(new File(FILE_NAME))) {
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     ResidentTenantManagement newRT = new ResidentTenantManagement();
                     newRT.setId(parts[0]);
                     newRT.setName(parts[1]);
                     newRT.setPassword(parts[2]);
                     newRT.setAge(Integer.parseInt(parts[3]));
-                    newRT.setFloor(Integer.parseInt(parts[4]));
-                    newRT.setUnit(Integer.parseInt(parts[5]));
+                    newRT.setUnit(parts[4]);
                     resident_tenant.add(newRT);
                 }
             }
@@ -380,19 +378,19 @@ public class ResidentTenantManagement {
     }
 
     public void deleteResident() {
-        System.out.print("Enter the resident unit to be deleted: ");
+        System.out.print("Enter the resident ID to be deleted: ");
         Scanner scan = new Scanner(System.in);
-        int residentUnitToDelete = scan.nextInt();
+        String idToDelete = scan.nextLine();
 
         StringBuilder contentBuilder = new StringBuilder();
-        boolean residentFound = false;
+        boolean idFound = false;
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
             String currentLine;
             while ((currentLine = br.readLine()) != null) {
-                String[] parts = currentLine.split(" ");
-                int unit = Integer.parseInt(parts[4]);
-                if (unit == residentUnitToDelete) {
-                    residentFound = true;
+                String[] parts = currentLine.split("\\|");
+                String savedID = parts[4];
+                if (savedID.equals(idToDelete)) {
+                    idFound = true;
                 } else {
                     contentBuilder.append(currentLine).append("\n");
                 }
@@ -401,8 +399,8 @@ public class ResidentTenantManagement {
             e.printStackTrace();
         }
 
-        if (!residentFound) {
-            System.out.println("Resident living in unit number " + residentUnitToDelete + " was not found.");
+        if (!idFound) {
+            System.out.println("ID " + idToDelete + " was not found.");
             return;
         }
 
@@ -412,6 +410,6 @@ public class ResidentTenantManagement {
             e.printStackTrace();
         }
 
-        System.out.println("Deleted the resident with the ID: " + residentUnitToDelete);
+        System.out.println("Deleted the Resident/Tenant with ID: " + idToDelete);
     }
 }
