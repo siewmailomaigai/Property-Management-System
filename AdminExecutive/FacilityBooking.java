@@ -337,7 +337,7 @@ public class FacilityBooking extends FacilityManagement {
             }
         }
         if (!found) {
-            System.out.println("ID not found.");
+            System.out.println("Booking ID not found.");
         } else {
             try {
                 try (FileWriter infile = new FileWriter(FILE_NAME3)) {
