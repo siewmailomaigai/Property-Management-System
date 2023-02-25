@@ -132,15 +132,6 @@ public class EmployeeManagement {
         } while (cont != 0);
     }
 
-    
-    /*public void newEmployee() {
-        System.out.println("Enter employee name: ");
-        name = input.nextLine();
-        System.out.println("Enter contact information: ");
-        contactInfo = input.nextLine();
-        System.out.println("Enter employee role: ");
-        role = input.nextLine();
-    }*/
 
     public static String getLastSGId(){
         String lastId= DEFAULT_SECURITYGUARD_ID;
@@ -279,14 +270,17 @@ public class EmployeeManagement {
         else if(role.equalsIgnoreCase("technician")){
             String lastId = getLastTCId();
             eID = generateNewTCId(lastId);
+            password = " ";
         }
         else if(role.equalsIgnoreCase("cleaner")){
             String lastId = getLastCLId();
             eID = generateNewCLId(lastId);
+            password = " ";
         }
         else if(role.equalsIgnoreCase("other")){
             String lastId = getLastOtherId();
             eID = generateNewOtherId(lastId);
+            password = " ";
         }
         else{
             System.out.println("Error! Unknown role");
@@ -330,7 +324,7 @@ public class EmployeeManagement {
 
     
     public void showEmployeeInfo() {
-        System.out.println("Employee Information:");
+        System.out.println("\nEmployee Information:");
         System.out.println("Employee ID: " + geteID());
         System.out.println("Employee Name: " + getName());
         System.out.println("Contact information: " + getContactInfo());
