@@ -1,10 +1,13 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package AdminExecutive;
 
+/**
+ *
+ * @author Hong Shen
+ */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,8 +32,7 @@ public class FacilityManagement {
     Scanner input = new Scanner(System.in);
     Scanner search2 = new Scanner(System.in);
     public static final String FILE_NAME2 = "facilitymanagement.txt";
-    ArrayList<FacilityManagement> facility = new ArrayList<>(10);
-    final static int MAX_CAPACITY = 2;
+    ArrayList<FacilityManagement> facility = new ArrayList<>();
     int choice, cont;
 
     //default constructor
@@ -142,7 +144,7 @@ public class FacilityManagement {
             Scanner scan = new Scanner(new File(FILE_NAME2));
             while (scan.hasNextLine()) {
                 String line = scan.nextLine();
-                String[] parts = line.split(" ");
+                String[] parts = line.split("\\|");
                 FacilityManagement newFac = new FacilityManagement();
                 if (parts.length >= 5) {
                     newFac.setFacilityName(parts[0]);
@@ -164,7 +166,7 @@ public class FacilityManagement {
         try {
             FileWriter fileWriter = new FileWriter(FILE_NAME2, true); // Set the second argument to true to append to the end of the file.
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.println(newFac2.getFacilityName() + " " + newFac2.getCapacity() + " " + newFac2.getFacilityLocation() + " " + newFac2.getHourlyRate());
+            printWriter.println(newFac2.getFacilityName() + "|" + newFac2.getCapacity() + "|" + newFac2.getFacilityLocation() + "|" + newFac2.getHourlyRate());
             printWriter.close();
         } catch (IOException ev) {
             System.out.println("An error occured when writing into the file.");
@@ -176,7 +178,7 @@ public class FacilityManagement {
             try (Scanner scan = new Scanner(new File(FILE_NAME2))) {
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     FacilityManagement newFac = new FacilityManagement();
                     if (parts.length >= 4) {
                         newFac.setFacilityName(parts[0]);
@@ -201,7 +203,7 @@ public class FacilityManagement {
             try (Scanner scan = new Scanner(new File(FILE_NAME2))) {
                 while (scan.hasNextLine()) {
                     String line = scan.nextLine();
-                    String[] parts = line.split(" ");
+                    String[] parts = line.split("\\|");
                     FacilityManagement newFac = new FacilityManagement();
                     if (parts.length >= 4) {
                         newFac.setFacilityName(parts[0]);
@@ -228,15 +230,15 @@ public class FacilityManagement {
                 System.out.println("3. Hourly Rate");
                 System.out.println("4. Cancel");
                 System.out.print("Enter choice: ");
-                int choice = input.nextInt();
+                int choice1 = input.nextInt();
                 input.nextLine();
                 FacilityManagement fac = facility.get(a);
-                switch (choice) {
+                switch (choice1) {
                     case 1 -> {
 
                         System.out.print("Enter new capacity: ");
-                        int capacity = input.nextInt();
-                        fac.setCapacity(capacity);
+                        int newCapacity = input.nextInt();
+                        fac.setCapacity(newCapacity);
                     }
                     case 2 -> {
                         System.out.print("Enter new facility location: ");
@@ -245,8 +247,8 @@ public class FacilityManagement {
                     }
                     case 3 -> {
                         System.out.print("Enter new hourly rate: ");
-                        double hourlyRate = input.nextDouble();
-                        fac.setHourlyRate(hourlyRate);
+                        double newHourlyRate = input.nextDouble();
+                        fac.setHourlyRate(newHourlyRate);
                     }
 
                     default ->
@@ -264,9 +266,9 @@ public class FacilityManagement {
             try {
                 try (FileWriter infile = new FileWriter(FILE_NAME2)) {
                     for (int i = 0; i < facility.size(); i++) {
-                        infile.append(facility.get(i).getFacilityName() + " "
-                                + facility.get(i).getCapacity() + " "
-                                + facility.get(i).getFacilityLocation() + " "
+                        infile.append(facility.get(i).getFacilityName() + "|"
+                                + facility.get(i).getCapacity() + "|"
+                                + facility.get(i).getFacilityLocation() + "|"
                                 + facility.get(i).getHourlyRate() + "\n");
 
                     }
@@ -287,7 +289,7 @@ public class FacilityManagement {
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME2))) {
             String currentLine;
             while ((currentLine = br.readLine()) != null) {
-                String[] parts = currentLine.split(" ");
+                String[] parts = currentLine.split("\\|");
                 String name = (parts[0]);
                 if (name.equals(facilityNameToDelete)) {
                     residentFound = true;
@@ -314,4 +316,3 @@ public class FacilityManagement {
     }
 
 }
-
