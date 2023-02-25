@@ -26,7 +26,6 @@ import java.util.ArrayList;
 public class FacilityManagement {
 
     public String facilityName;
-    public int capacity;
     private String facilityLocation;
     private double hourlyRate;
     Scanner input = new Scanner(System.in);
@@ -39,9 +38,8 @@ public class FacilityManagement {
     public FacilityManagement() {
     }
 
-    public FacilityManagement(String facilityName, int capacity, String facilityLocation, double hourlyRate) {
+    public FacilityManagement(String facilityName, String facilityLocation, double hourlyRate) {
         this.facilityName = facilityName;
-        this.capacity = capacity;
         this.facilityLocation = facilityLocation;
         this.hourlyRate = hourlyRate;
     }
@@ -52,14 +50,6 @@ public class FacilityManagement {
 
     public void setFacilityName(String facilityName) {
         this.facilityName = facilityName;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
     }
 
     public String getFacilityLocation() {
@@ -81,9 +71,6 @@ public class FacilityManagement {
     public void newFacility() {
         System.out.println("Enter facility name: ");
         facilityName = input.nextLine();
-        System.out.println("Enter facility capacity: ");
-        capacity = input.nextInt();
-        input.nextLine();
         System.out.println("Enter facility location: ");
         facilityLocation = input.nextLine();
         System.out.println("Enter hourly rate: ");
@@ -92,9 +79,8 @@ public class FacilityManagement {
     }
 
     public void showFacilityInfo() {
-        System.out.println("Facility Information:");
+        System.out.println("\nFacility Information:");
         System.out.println("Facility Name: " + getFacilityName());
-        System.out.println("Capacity: " + getCapacity());
         System.out.println("Facility Location: " + getFacilityLocation());
         System.out.println("Hourly Rate: " + getHourlyRate());
         System.out.println("\n");
@@ -146,11 +132,10 @@ public class FacilityManagement {
                 String line = scan.nextLine();
                 String[] parts = line.split("\\|");
                 FacilityManagement newFac = new FacilityManagement();
-                if (parts.length >= 5) {
+                if (parts.length >= 3) {
                     newFac.setFacilityName(parts[0]);
-                    newFac.setCapacity(Integer.parseInt(parts[1]));
-                    newFac.setFacilityLocation(parts[2]);
-                    newFac.setHourlyRate(Double.parseDouble(parts[3]));
+                    newFac.setFacilityLocation(parts[1]);
+                    newFac.setHourlyRate(Double.parseDouble(parts[2]));
                 }
                 facility.add(newFac);
             }
@@ -166,7 +151,7 @@ public class FacilityManagement {
         try {
             FileWriter fileWriter = new FileWriter(FILE_NAME2, true); // Set the second argument to true to append to the end of the file.
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.println(newFac2.getFacilityName() + "|" + newFac2.getCapacity() + "|" + newFac2.getFacilityLocation() + "|" + newFac2.getHourlyRate());
+            printWriter.println(newFac2.getFacilityName() + "|" +  newFac2.getFacilityLocation() + "|" + newFac2.getHourlyRate());
             printWriter.close();
         } catch (IOException ev) {
             System.out.println("An error occured when writing into the file.");
@@ -180,11 +165,10 @@ public class FacilityManagement {
                     String line = scan.nextLine();
                     String[] parts = line.split("\\|");
                     FacilityManagement newFac = new FacilityManagement();
-                    if (parts.length >= 4) {
+                    if (parts.length >= 3) {
                         newFac.setFacilityName(parts[0]);
-                        newFac.setCapacity(Integer.parseInt(parts[1]));
-                        newFac.setFacilityLocation(parts[2]);
-                        newFac.setHourlyRate(Double.parseDouble(parts[3]));
+                        newFac.setFacilityLocation(parts[1]);
+                        newFac.setHourlyRate(Double.parseDouble(parts[2]));
                     }
                     facility.add(newFac);
                 }
@@ -205,11 +189,10 @@ public class FacilityManagement {
                     String line = scan.nextLine();
                     String[] parts = line.split("\\|");
                     FacilityManagement newFac = new FacilityManagement();
-                    if (parts.length >= 4) {
+                    if (parts.length >= 3) {
                         newFac.setFacilityName(parts[0]);
-                        newFac.setCapacity(Integer.parseInt(parts[1]));
-                        newFac.setFacilityLocation(parts[2]);
-                        newFac.setHourlyRate(Double.parseDouble(parts[3]));
+                        newFac.setFacilityLocation(parts[1]);
+                        newFac.setHourlyRate(Double.parseDouble(parts[2]));
                     }
                     facility.add(newFac);
                 }
@@ -225,32 +208,28 @@ public class FacilityManagement {
             if (facility.get(a).getFacilityName().equalsIgnoreCase(checkFacilityName)) {
                 found = true;
                 System.out.println("Select the field you want to modify");
-                System.out.println("1. Capacity");
-                System.out.println("2. Facility Location");
-                System.out.println("3. Hourly Rate");
-                System.out.println("4. Cancel");
+                System.out.println("1. Facility Location");
+                System.out.println("2. Hourly Rate");
+                System.out.println("3. Cancel");
                 System.out.print("Enter choice: ");
                 int choice1 = input.nextInt();
                 input.nextLine();
                 FacilityManagement fac = facility.get(a);
                 switch (choice1) {
-                    case 1 -> {
-
-                        System.out.print("Enter new capacity: ");
-                        int newCapacity = input.nextInt();
-                        fac.setCapacity(newCapacity);
-                    }
-                    case 2 -> {
+                    case  1-> {
                         System.out.print("Enter new facility location: ");
                         String facilitylocation = input.nextLine();
                         fac.setFacilityLocation(facilitylocation);
                     }
-                    case 3 -> {
+                    case 2 -> {
                         System.out.print("Enter new hourly rate: ");
                         double newHourlyRate = input.nextDouble();
                         fac.setHourlyRate(newHourlyRate);
                     }
-
+                    case 3->{
+                        System.out.println("Modification cancelled");
+                        return;
+                    }
                     default ->
                         System.out.println("Invalid input.");
                 }
@@ -267,7 +246,6 @@ public class FacilityManagement {
                 try (FileWriter infile = new FileWriter(FILE_NAME2)) {
                     for (int i = 0; i < facility.size(); i++) {
                         infile.append(facility.get(i).getFacilityName() + "|"
-                                + facility.get(i).getCapacity() + "|"
                                 + facility.get(i).getFacilityLocation() + "|"
                                 + facility.get(i).getHourlyRate() + "\n");
 
@@ -291,7 +269,7 @@ public class FacilityManagement {
             while ((currentLine = br.readLine()) != null) {
                 String[] parts = currentLine.split("\\|");
                 String name = (parts[0]);
-                if (name.equals(facilityNameToDelete)) {
+                if (name.equalsIgnoreCase(facilityNameToDelete)) {
                     residentFound = true;
                 } else {
                     contentBuilder.append(currentLine).append("\n");
