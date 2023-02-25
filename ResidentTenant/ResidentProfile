@@ -24,12 +24,9 @@ public class ResidentProfile extends LoginRT{
     private String id;
     private String name;
     private int age;
-    private int floor;
     private int unit;
     private String password;
-    //public static String checkId;
-    //String checkId;
-    ArrayList<ResidentProfile> resident_tenant = new ArrayList<>(20);
+    ArrayList<ResidentProfile> resident_tenant = new ArrayList<>();
     
     Scanner input=new Scanner(System.in);
 
@@ -39,12 +36,11 @@ public class ResidentProfile extends LoginRT{
     }
     
     //constructor with arguments
-    public ResidentProfile(String id, String name, int age, int floor, int unit, String password) {
+    public ResidentProfile(String id, String name, int age, int unit, String password) {
         super();
         this.id = id;
         this.name = name;
         this.age = age;
-        this.floor = floor;
         this.unit = unit;
         this.password=password;     
     }
@@ -77,14 +73,6 @@ public class ResidentProfile extends LoginRT{
         this.age = age;
     }
 
-    public int getFloor() {
-        return floor;
-    }
-
-    public void setFloor(int floor) {
-        this.floor = floor;
-    }
-
     public int getUnit() {
         return unit;
     }
@@ -100,46 +88,7 @@ public class ResidentProfile extends LoginRT{
     public void setPassword(String password) {
         this.password = password;
     }
-       
-   
-    /*public boolean validateCredentials(String checkId, String checkPassword) {
-        try (Scanner scan = new Scanner(new FileReader(filename))) {           
-            while (scan.hasNextLine()) {
-                String line= scan.nextLine();   
-                String[] parts = line.split(" ");
-                String storedId=parts[0];
-                String storedName=parts[1];
-                String storedPassword=parts[2];
-                int storedAge=Integer.parseInt(parts[3]);
-                int storedFloor=Integer.parseInt(parts[4]);
-                int storedUnit=Integer.parseInt(parts[5]);
-                if(checkId.equals(storedId)&&checkPassword.equals(storedPassword)){
-                    return true;
-                }
-            }
-        }catch (IOException e) {
-         e.printStackTrace();
-        }
-        return false;
-    }
-    
-    public void loginRT(){
-        Scanner scan=new Scanner(System.in);
-        ResidentProfile LoginRT=new ResidentProfile();
-        //String checkId;
-        String checkPassword;
-        do{
-            System.out.println("ID: ");
-            checkId=scan.nextLine();
-            System.out.println("Password: ");
-            checkPassword=scan.nextLine();
-            if(validateCredentials(checkId, checkPassword)){
-                System.out.println("ok");
-            }else{
-                System.out.println("Wrong ID or password");
-            }
-        }while(this.validateCredentials(checkId, checkPassword)==false);
-    }*/
+           
     
     public void runProfile(){
         ResidentProfile run=new ResidentProfile();                 
@@ -167,7 +116,6 @@ public class ResidentProfile extends LoginRT{
         System.out.println("Name: " + getName());
         System.out.println("Age: " + getAge());
         System.out.println("Password: "+getPassword());
-        System.out.println("Floor: " + getFloor());
         System.out.println("Unit: " + getUnit());
     }
     
@@ -182,8 +130,7 @@ public class ResidentProfile extends LoginRT{
                     newRT.setName(parts[1]);
                     newRT.setPassword(parts[2]);
                     newRT.setAge(Integer.parseInt(parts[3]));
-                    newRT.setFloor(Integer.parseInt(parts[4]));
-                    newRT.setUnit(Integer.parseInt(parts[5]));
+                    newRT.setUnit(Integer.parseInt(parts[4]));
                     resident_tenant.add(newRT);
                 }
             }
@@ -192,10 +139,9 @@ public class ResidentProfile extends LoginRT{
         }
 
         for (int a = 0; a < resident_tenant.size(); a++) {
-                                if (checkId.equalsIgnoreCase(resident_tenant.get(a).getId())) {
-                                    resident_tenant.get(a).showResidentInfo();
-                                    //resident_tenant.clear();
-                                } 
+            if (checkId.equalsIgnoreCase(resident_tenant.get(a).getId())) {
+                resident_tenant.get(a).showResidentInfo();
+            } 
         }
     }
     
@@ -210,14 +156,14 @@ public class ResidentProfile extends LoginRT{
                     newRT.setName(parts[1]);
                     newRT.setPassword(parts[2]);
                     newRT.setAge(Integer.parseInt(parts[3]));
-                    newRT.setFloor(Integer.parseInt(parts[4]));
-                    newRT.setUnit(Integer.parseInt(parts[5]));
+                    newRT.setUnit(Integer.parseInt(parts[4]));
                     resident_tenant.add(newRT);
                 }
             }
-        }   catch (FileNotFoundException e) {
+        }   
+        catch (FileNotFoundException e) {
                 System.out.println("The file 'resident_file.txt' was not found.");
-            }
+        }
 
         for (int a = 0; a < resident_tenant.size(); a++) {
             if (resident_tenant.get(a).getId().equalsIgnoreCase(checkId)) {
@@ -262,11 +208,11 @@ public class ResidentProfile extends LoginRT{
             try {
                 try (FileWriter infile = new FileWriter(filename)) {
                     for (int i = 0; i < resident_tenant.size(); i++) {
-                        infile.append(resident_tenant.get(i).getId() + " "
-                                + resident_tenant.get(i).getName() + " "
+                        infile.append(
+                            resident_tenant.get(i).getId() + " "
+                            + resident_tenant.get(i).getName() + " "
                             + resident_tenant.get(i).getPassword() + " "
                             + resident_tenant.get(i).getAge() + " "
-                            + resident_tenant.get(i).getFloor() + " "
                             + resident_tenant.get(i).getUnit() + "\n");
                     }
                 }
@@ -277,4 +223,3 @@ public class ResidentProfile extends LoginRT{
     
     
 }
-
