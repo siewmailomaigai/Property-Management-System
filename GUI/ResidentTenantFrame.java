@@ -4,10 +4,8 @@ import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class ResidentTenantFrame extends JFrame implements ActionListener { 
-public static String filename = "residentfile.txt";
     // Login panel
     JPanel loginPanel = new JPanel();
     JLabel UserIdLabel = new JLabel("User ID:");
@@ -72,47 +70,40 @@ public static String filename = "residentfile.txt";
     }
 
     public void actionPerformed(ActionEvent e) {
-        // Get the ID and password entered by the user
-        String id = UserIdField.getText();
+        // Get the username and password entered by the user
+        String userId = UserIdField.getText();
         String password = new String(PasswordField.getPassword());
 
         // Validate the user's credentials
-        LoginRT login = new LoginRT("residentfile.txt");
-        if (login.validateCredentials(id, password)) {
+        if (LoginResident.validateCredentials(userId, password)) {
             // Display a success message
             JOptionPane.showMessageDialog(null, "Login successful!");
+            // Open new frame after login is successful
+            ResTent2 restent = new ResTent2();
+            restent.setVisible(true);
+            dispose();
         } else {
             // Display an error message
-            JOptionPane.showMessageDialog(null, "Wrong ID or password");
+            JOptionPane.showMessageDialog(null, "Invalid username or password");
+        }
+    }
+
+    static class LoginResident {
+        private static boolean validateCredentials(String userId, String password) {
+            try (BufferedReader br = new BufferedReader(new FileReader("residentfile.txt"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] parts = line.split("\\|");
+                    if (parts[0].equals(userId) && parts[3].equals(password)) {
+                        return true;
+                    }
+                }
+            } catch (IOException e) {
+               
+            e.printStackTrace();
+        }
+        return false;
         }
     }
 }
 
-class LoginRT {
-    public static String filename = "residentfile.txt";
-    
-    public LoginRT(){
-        
-    }
-    
-    public LoginRT(String filename) {
-        LoginRT.filename = filename;
-    }
-    
-    public boolean validateCredentials(String id, String password) {
-    try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split("\\|");
-            String storedId = parts[0];
-            String storedPassword = parts[2];
-            if (id.equals(storedId) && password.equals(storedPassword)) {
-                return true;
-            }
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    return false;
-   }
-}
