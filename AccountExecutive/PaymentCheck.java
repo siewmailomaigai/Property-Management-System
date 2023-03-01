@@ -16,8 +16,7 @@ import java.util.Scanner;
  * @author 60192
  */
 public class PaymentCheck {
-
-    public static void main(String[] args) {
+    public void PaymentCheck(){
 
         Scanner scanner = new Scanner(System.in);
 
@@ -150,4 +149,5 @@ public class PaymentCheck {
         }
 
     }
+
 }
