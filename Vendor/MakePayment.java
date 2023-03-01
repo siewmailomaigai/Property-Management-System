@@ -18,7 +18,7 @@ import ResidentandTenant.PaymentDetails;
 
 public class MakePayment implements PaymentDetails {
 
-    public static void main(String[] args) {
+    public void MakePayment() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter vendor ID: ");
@@ -122,4 +122,3 @@ class Payment {
         return true;
     }
 }
-
