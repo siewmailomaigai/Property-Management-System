@@ -8,15 +8,12 @@ package AccountExecutive;
  *
  * @author 60192
  */
-import java.io.BufferedWriter;
-import java.io.File;
+import java.io.BufferedWriter;  
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class IssueInvoice {
-
-    public void runInvoice() {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -187,4 +184,4 @@ public class IssueInvoice {
 
         scanner.close();
     }
-}
+
