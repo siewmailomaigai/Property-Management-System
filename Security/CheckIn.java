@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class CheckIn {
 
-    public static void main(String[] args) {
+    public void CheckIn() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter Checkpoint ID: ");
@@ -44,5 +44,5 @@ public class CheckIn {
             System.out.println("Checkpoint with ID " + id + " not found.");
         }
     }
-}
 
+}
