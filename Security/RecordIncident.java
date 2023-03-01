@@ -154,8 +154,5 @@ public class RecordIncident {
         scanner.close();
     }
 
-    public static void main(String[] args) {
-        RecordIncident userManagement = new RecordIncident();
-        userManagement.run();
-    }
+
 }
