@@ -1,0 +1,20 @@
+ID: V01
+Start Date: 12/12/2023
+End Date: 12/25/2023
+Total Charges: 300.0
+Total Payments: 200.0
+Current Balance: 100.0
+
+ID: V02
+Start Date: 12/12/2023
+End Date: 12/25/2023
+Total Charges: 300.0
+Total Payments: 200.0
+Current Balance: 100.0
+ID: V02
+Start Date: 12/12/2023
+End Date: 12/20/2023
+Total Trannsaction: 200.0
+Initial Balance: 500.0
+Current Balance: 300.0
+

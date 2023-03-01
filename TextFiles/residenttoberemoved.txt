@@ -1,0 +1,10 @@
+Generate receipt:
+Resident ID: V03
+Amount charged: 200.0
+Amount paid: 200.0
+
+Generate receipt:
+Resident ID: V04
+Amount charged: 200.0
+Amount paid: 200.0
+

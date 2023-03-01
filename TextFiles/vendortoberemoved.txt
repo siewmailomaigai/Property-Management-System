@@ -1,0 +1,9 @@
+Generate receipt:
+Vendor ID: R02
+Amount charged: 200.0
+Amount paid: 200.0
+
+Generate receipt:
+Vendor ID: R05
+Amount charged: 200.0
+Amount paid: 200.0

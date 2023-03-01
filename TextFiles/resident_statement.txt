@@ -1,0 +1,7 @@
+ID: R02
+Start Date: 12/12/2023
+End Date: 12/25/2023
+Total Charges: 30.0
+Total Payments: 20.0
+Current Balance: 10.0
+

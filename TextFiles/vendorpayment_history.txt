@@ -1,0 +1,8 @@
+Vendor ID: V03
+Amount charged: 200.0
+Amount paid: 200.0
+
+Vendor ID: V03
+Amount charged: 200.0
+Amount paid: 200.0
+
