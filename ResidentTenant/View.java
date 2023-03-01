@@ -15,8 +15,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class View {
-
-    public static void main(String[] args) {
+    
         Scanner scanner = new Scanner(System.in);
         System.out.println("Select an option:");
         System.out.println("1. View invoice");
@@ -74,5 +73,5 @@ public class View {
             System.err.println("Error reading file: " + e.getMessage());
         }
     }
-}
+
 
