@@ -8,7 +8,6 @@ package Vendor;
  *
  * @author 60192
  */
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,7 +15,6 @@ import java.util.Scanner;
 
 public class View {
 
- public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Select an option:");
         System.out.println("1. View invoice");
@@ -45,7 +43,7 @@ public class View {
                 break;
             default:
                 System.out.println("Invalid option selected.");
-                return;
+               return;
         }
 
         System.out.print("Enter Vendor ID: ");
@@ -74,4 +72,4 @@ public class View {
             System.err.println("Error reading file: " + e.getMessage());
         }
     }
-}
+
