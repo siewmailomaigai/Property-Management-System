@@ -8,6 +8,7 @@ package AccountExecutive;
  *
  * @author 60192
  */
+import java.awt.TextArea;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -16,6 +17,20 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class OutstandingFee {
+
+    private TextArea outstandingTextArea;
+
+    public OutstandingFee() {
+        outstandingTextArea = new TextArea();
+    }
+
+    public void appendText(String string) {
+        outstandingTextArea.appendText(string);
+    }
+
+    public TextArea getOutstandingTextArea() {
+        return outstandingTextArea;
+    }
 
     public void addOutstanding() {
 
@@ -104,15 +119,18 @@ public class OutstandingFee {
         }
     }
 
-    public void viewOutstanding() {
+    public OutstandingFee viewOutstanding() {
+        OutstandingFee ui = new OutstandingFee();
+
         try (BufferedReader br = new BufferedReader(new FileReader("outstandingFee.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+                ui.appendText(line + "\n");
             }
         } catch (IOException e) {
             System.err.println("Error reading from file: " + e.getMessage());
         }
-    }
 
+        return ui;
+    }
 }
