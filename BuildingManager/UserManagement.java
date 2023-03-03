@@ -142,7 +142,7 @@ public class UserManagement {
 
         switch (userType) {
             case 1:
-                String accountExecutiveString = String.format("%s,%s,%s,%s", id, password, name, email);
+                String accountExecutiveString = String.format("%s,%s,%s,%s", id, name, password, email);
                 try {
                     File file = new File("accountE.txt");
                     if (!file.exists()) {
@@ -158,7 +158,7 @@ public class UserManagement {
                 }
                 break;
             case 2:
-                String adminExecutiveString = String.format("%s,%s,%s,%s", id, password, name, email);
+                String adminExecutiveString = String.format("%s,%s,%s,%s", id, name, password, email);
                 try {
                     File file = new File("adminE.txt");
                     if (!file.exists()) {
@@ -174,7 +174,7 @@ public class UserManagement {
                 }
                 break;
             case 3:
-                String buildingExecutiveString = String.format("%s,%s,%s,%s", id, password, name, email);
+                String buildingExecutiveString = String.format("%s,%s,%s,%s", id, name, password, email);
                 try {
                     File file = new File("buildingE.txt");
                     if (!file.exists()) {
@@ -262,7 +262,7 @@ public class UserManagement {
             for (int i = 0; i < lines.size(); i++) {
                 String[] fields = lines.get(i).split(",");
                 if (fields[0].equals(id)) {
-                    String updatedLine = String.format("%s,%s,%s,%s", id, user.getPassword(), user.getName(), user.getEmail());
+                    String updatedLine = String.format("%s,%s,%s,%s", id, user.getName(), user.getPassword(), user.getEmail());
                     lines.set(i, updatedLine);
                     break;
                 }
